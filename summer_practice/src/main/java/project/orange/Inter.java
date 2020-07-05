@@ -1,69 +1,245 @@
 package project.orange;
+
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
+import java.awt.geom.*;
+import java.io.*;
 
-
-public class Inter extends JDialog {
+public class Inter extends JFrame {
     private JPanel contentPane;
-    private JButton ввестиГрафИзФайлаButton;
-    private JButton сгенерироватьСлучайныйГрафButton;
+    private JButton readGraphFromFileButton;
+    private JButton generateRandomGraphButton;
     private JTextArea textArea;
-    private JButton выпполнитьАлгоритмПошаговоButton;
-    private JTable grafMatrix;
-    private JButton ввестиГрафСКлавиатурыButton;
-    private JButton отрисоватьГрафButton;
-    private JButton выполнитьАлгоритмButton;
-    private JButton сохранитьРезультатВФайлButton;
-    private JButton обАлгоритмеButton;
-    private JButton помощьButton;
+    private JButton stepByStepButton;
+    private JTable graphMatrix;
+    private JTextArea lgraph;
+    private  JPanel graph;
+    private JButton readGraphFromKeyboardButton;
+    private JButton drawGraphButton;
+    private JButton runAlgorithmButton;
+    private JButton saveResultToFileButton;
+    private JButton aboutAlgorithmButton;
+    private JButton helpButton;
+
+    private Input inputWin;
 
     public Inter() {
-        setContentPane(contentPane);
-        setModal(true);
-        setVisible(true);
-        getRootPane().setDefaultButton(ввестиГрафИзФайлаButton);
-
-        ввестиГрафИзФайлаButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onFromFile();
+        setUI();
+        inputWin = new Input();
+        inputWin.setBounds(150, 100, 320, 330);
+        readGraphFromFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    onFromFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        сгенерироватьСлучайныйГрафButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        generateRandomGraphButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
                 onRandom();
             }
         });
 
-        отрисоватьГрафButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        drawGraphButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
                 onDraw();
             }
         });
 
-        // call onCancel() when cross is clicked
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onHelp();
+            }
+        });
+
+        aboutAlgorithmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onAbout();
+            }
+        });
+
+        runAlgorithmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onRun();
+            }
+        });
+
+        stepByStepButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onStep();
+            }
+        });
+
+        saveResultToFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onSave();
+            }
+        });
+
+        readGraphFromKeyboardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onConsole();
+            }
+        });
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
+            @Override
+            public void windowClosed(WindowEvent e) {
                 dispose();
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
                 onRandom();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        $$$setupUI$$$();
+
     }
 
-    private void onFromFile() {
-        String mass = "Text is " + textArea.getText() + "\n";
-        JOptionPane.showMessageDialog(null, mass, "smthn", JOptionPane.PLAIN_MESSAGE);
+    private void setUI(){
+
+        /*
+        Цвета для того, чтобы показать, как все делится.
+        Лучше ipady, gridy и все такое часто не трогать, а то я хз, что там действительно влияет на расположение, а что
+        уже нет
+        Наверно для всех JPanel лучше отдельные методы создать, чтобы было аккуратнее и чище
+        И мне не нравится, что при запуске программы сразу не открывается большое окно, а его нужно растягивать. Я не знаю,
+        как это исправить
+        */
+
+        contentPane = new JPanel();
+        //contentPane.setSize(1920, 1080);
+
+        contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+
+        JPanel algoPanel = new JPanel();
+        algoPanel.setLayout(new GridLayout(1, 2));
+        graph = new JPanel();
+        //graph.setBackground(new Color(0xB500));
+        lgraph = new JTextArea("Тут будет текущий граф");
+        lgraph.setLineWrap(true);
+        lgraph.setEnabled(false);
+        //  lgraph.
+        graph.add(lgraph);
+
+        JPanel tables = new JPanel();
+        tables.setLayout(new GridLayout(2, 1));
+        JPanel startMatrix = new JPanel();
+        startMatrix.setBackground(new Color(0xB50000));
+
+        JPanel resultMatrix = new JPanel();
+        resultMatrix.setBackground(new Color(0x00BB));
+        tables.add(startMatrix);
+        tables.add(resultMatrix);
+
+        algoPanel.add(graph);
+        algoPanel.add(tables);
+
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridheight = 10;
+        constraints.anchor = GridBagConstraints.PAGE_START;
+        contentPane.add(algoPanel, constraints);
+
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new GridLayout(3, 3, 5, 0));
+        setButtons(buttonsPanel);
+
+        constraints.ipady = 0;
+        constraints.gridy = 10;
+        constraints.gridx = 0;
+        constraints.weighty = 0.05;
+        constraints.anchor = GridBagConstraints.PAGE_END;
+        constraints.gridheight = 1;
+        contentPane.add(buttonsPanel, constraints);
+
+
+
+        setContentPane(contentPane);
+        setVisible(true);
+    }
+
+    private void setButtons(JPanel buttonsPanel){
+        readGraphFromFileButton = new JButton();
+        readGraphFromFileButton.setText("Ввести граф из файла");
+        buttonsPanel.add(readGraphFromFileButton);
+
+        readGraphFromKeyboardButton = new JButton();
+        readGraphFromKeyboardButton.setText("Вести граф с клавиатуры");
+        buttonsPanel.add(readGraphFromKeyboardButton);
+
+        generateRandomGraphButton = new JButton();
+        generateRandomGraphButton.setText("Сгенерировать случаный граф");
+        buttonsPanel.add(generateRandomGraphButton);
+
+
+        runAlgorithmButton = new JButton();
+        runAlgorithmButton.setText("Запустить алгоритм");
+        buttonsPanel.add(runAlgorithmButton);
+
+        stepByStepButton = new JButton();
+        stepByStepButton.setText("Алгоритм пошагово");
+        buttonsPanel.add(stepByStepButton);
+
+        saveResultToFileButton = new JButton();
+        saveResultToFileButton.setText("Сохранить результат в файл");
+        buttonsPanel.add(saveResultToFileButton);
+
+
+        helpButton = new JButton();
+        helpButton.setText("Помощь");
+        buttonsPanel.add(helpButton);
+
+        drawGraphButton = new JButton();
+        drawGraphButton.setText("Отрисовать граф");
+        buttonsPanel.add(drawGraphButton);
+
+        aboutAlgorithmButton = new JButton();
+        aboutAlgorithmButton.setText("Об алгоритме");
+        buttonsPanel.add(aboutAlgorithmButton);
+
+    }
+
+    private void onFromFile() throws IOException {
+        JFileChooser fileopen = new JFileChooser();
+        int ret = fileopen.showDialog(null, "Открыть файл");
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            File file = fileopen.getSelectedFile();
+            FileReader reader = new FileReader(file);
+            String input = "";
+            int c;
+            while((c=reader.read())!=-1){
+                input += (char)c;
+            }
+            System.out.println(input);
+            lgraph.setText(input);
+            graph.add(lgraph);
+        }
     }
 
     private void onRandom() {
@@ -71,90 +247,61 @@ public class Inter extends JDialog {
     }
 
     private void onDraw () {
+
         JFrame frame = new JFrame();
         frame.setVisible(true);
-        frame.setBounds(50,50, 100, 100);
+        frame.setBounds(250,250, 300, 300);
+
         class GComp extends JComponent {
             protected void paintComponent(Graphics g) {
                 Font font = new Font("Ariel", Font.BOLD, 25);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setFont(font);
                 Line2D l2 = new Line2D.Double(1, 1, 100, 100);
+                Rectangle rec = new Rectangle(10, 10, 30, 30);
+                Ellipse2D ell = new Ellipse2D.Double(30, 50, 100, 100);
+                g2.draw(rec);
+                g2.draw(ell);
                 g2.draw(l2);
             }
         }
+
+
         frame.add(new GComp());
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
     }
 
-    public static void main(String[] args) {
-        Inter dialog = new Inter();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    private void onSave (){
+
     }
 
-    {
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-        $$$setupUI$$$();
+    private void onStep (){
+
     }
 
-    /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
-     *
-     * @noinspection ALL
-     */
-    private void $$$setupUI$$$() {
-        contentPane = new JPanel();
-        contentPane.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
-        contentPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.setBackground(new Color(0xF6AC1A));
-        panel1.setEnabled(false);
-        contentPane.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(314, 79), null, 0, false));
-        textArea = new JTextArea();
-
-        panel1.add(textArea, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        grafMatrix = new JTable();
-        panel1.add(grafMatrix, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
-        final JPanel panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), 10, 10));
-        contentPane.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        выполнитьАлгоритмButton = new JButton();
-        выполнитьАлгоритмButton.setText("Выполнить алгоритм");
-        panel2.add(выполнитьАлгоритмButton, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        сохранитьРезультатВФайлButton = new JButton();
-        сохранитьРезультатВФайлButton.setText("Сохранить результат в файл");
-        panel2.add(сохранитьРезультатВФайлButton, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        ввестиГрафСКлавиатурыButton = new JButton();
-        ввестиГрафСКлавиатурыButton.setText("Ввести граф с клавиатуры");
-        panel2.add(ввестиГрафСКлавиатурыButton, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        ввестиГрафИзФайлаButton = new JButton();
-        ввестиГрафИзФайлаButton.setText("Ввести граф из файла");
-        panel2.add(ввестиГрафИзФайлаButton, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        сгенерироватьСлучайныйГрафButton = new JButton();
-        сгенерироватьСлучайныйГрафButton.setText("Сгенерировать случайный граф");
-        panel2.add(сгенерироватьСлучайныйГрафButton, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        выпполнитьАлгоритмПошаговоButton = new JButton();
-        выпполнитьАлгоритмПошаговоButton.setText("Выпполнить алгоритм пошагово");
-        panel2.add(выпполнитьАлгоритмПошаговоButton, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        отрисоватьГрафButton = new JButton();
-        отрисоватьГрафButton.setText("Отрисовать граф");
-        panel2.add(отрисоватьГрафButton, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        обАлгоритмеButton = new JButton();
-        обАлгоритмеButton.setText("Об алгоритме");
-        panel2.add(обАлгоритмеButton, new com.intellij.uiDesigner.core.GridConstraints(1, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        помощьButton = new JButton();
-        помощьButton.setText("Помощь");
-        panel2.add(помощьButton, new com.intellij.uiDesigner.core.GridConstraints(2, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    private void onHelp (){
+        JFrame frame = new JFrame();
+        frame.setVisible(true);
+        frame.setBounds(250,250, 300, 300);
     }
 
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
+    private void onRun (){
+
     }
 
+    private void onAbout (){
+        JFrame frame = new JFrame();
+        frame.setVisible(true);
+        frame.setBounds(250,250, 300, 300);
+    }
+
+    private void onConsole(){
+        inputWin.setVisible(true);
+        String input = inputWin.getInputText();
+
+        System.out.println("[" + input + "]");
+        lgraph.setText(input);
+        graph.add(lgraph);
+    }
 }
