@@ -7,6 +7,7 @@ import java.awt.geom.*;
 import java.io.*;
 
 public class Inter extends JFrame {
+
     private JPanel contentPane;
     private JButton readGraphFromFileButton;
     private JButton generateRandomGraphButton;
@@ -23,6 +24,7 @@ public class Inter extends JFrame {
     private JButton helpButton;
 
     private Input inputWin;
+    private String input;
 
     public Inter() {
         setUI();
@@ -139,11 +141,16 @@ public class Inter extends JFrame {
         JPanel algoPanel = new JPanel();
         algoPanel.setLayout(new GridLayout(1, 2));
         graph = new JPanel();
-        //graph.setBackground(new Color(0xB500));
+        graph.setLayout(new GridLayout(1, 1));
+        graph.setBackground(new Color(0xFFFFFF));
         lgraph = new JTextArea("Тут будет текущий граф");
         lgraph.setLineWrap(true);
-        lgraph.setEnabled(false);
-        //  lgraph.
+        lgraph.setEditable(false);
+        lgraph.setCaretColor(new Color(0x030311));
+        lgraph.setForeground(new Color(0x030311));
+        lgraph.setBackground(new Color(0xFFFFFF));
+        lgraph.setFont(new Font("Arial", Font.TYPE1_FONT, 15));
+        lgraph.setMinimumSize(new Dimension(100, 100));
         graph.add(lgraph);
 
         JPanel tables = new JPanel();
@@ -190,7 +197,7 @@ public class Inter extends JFrame {
         buttonsPanel.add(readGraphFromFileButton);
 
         readGraphFromKeyboardButton = new JButton();
-        readGraphFromKeyboardButton.setText("Вести граф с клавиатуры");
+        readGraphFromKeyboardButton.setText("Ввести граф с клавиатуры");
         buttonsPanel.add(readGraphFromKeyboardButton);
 
         generateRandomGraphButton = new JButton();
@@ -231,7 +238,7 @@ public class Inter extends JFrame {
         if (ret == JFileChooser.APPROVE_OPTION) {
             File file = fileopen.getSelectedFile();
             FileReader reader = new FileReader(file);
-            String input = "";
+            input = "";
             int c;
             while((c=reader.read())!=-1){
                 input += (char)c;
@@ -243,7 +250,14 @@ public class Inter extends JFrame {
     }
 
     private void onRandom() {
+        /*JDialog frame = new JDialog();
+        frame.setVisible(true);
+        frame.setBounds(250,250, 300, 300);
+        frame.setModal(true);*/
 
+
+        input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерафия случайного графа", JOptionPane.PLAIN_MESSAGE);
+        System.out.println(input);
     }
 
     private void onDraw () {
@@ -298,10 +312,12 @@ public class Inter extends JFrame {
 
     private void onConsole(){
         inputWin.setVisible(true);
-        String input = inputWin.getInputText();
+        input = inputWin.getInputText();
 
         System.out.println("[" + input + "]");
         lgraph.setText(input);
         graph.add(lgraph);
     }
+
+
 }
