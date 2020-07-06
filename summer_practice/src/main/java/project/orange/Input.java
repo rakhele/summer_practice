@@ -30,7 +30,7 @@ public class Input extends JDialog {
 
 
         mainPane = new JPanel();
-        var r = new GridLayout(2, 1);
+        GridLayout r = new GridLayout(2, 1);
         mainPane.setLayout(r);
 
 
