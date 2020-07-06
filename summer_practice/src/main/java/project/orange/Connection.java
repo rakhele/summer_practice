@@ -5,8 +5,9 @@ public class Connection {
     private int pathLength;
     private String path;
 
-    public Connection(int weight) {
+    public Connection(int weight, String path) {
         pathLength = edgeWeight = weight;
+        this.path = path;
     }
 
     public int getWeight() {
