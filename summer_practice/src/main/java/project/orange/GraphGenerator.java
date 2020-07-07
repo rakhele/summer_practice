@@ -3,11 +3,12 @@ package project.orange;
 import java.util.Random;
 
 public class GraphGenerator {
-    Vertex[] vertices;
+    static Vertex[] vertices;
     static final int maxVertices = 10;
     static final int maxWeight = 100;
-    final Random random = new Random();
-    public Graph generateRandom(int numVertices) {
+    static final Random random = new Random();
+
+    public static Graph generateRandom(int numVertices) {
         if (numVertices > maxVertices || numVertices < 0) {
             return null; // по-хорошему нужно кинуть исключение и в inter его обработать
         }
