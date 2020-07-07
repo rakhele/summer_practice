@@ -3,20 +3,24 @@ package project.orange;
 import java.util.ArrayList;
 
 public class Graph {
-    private int verNum;
+    private final int verNum;
+    private int currI;
+    private int currJ;
+    private int currK;
     Connection[][] matrix;
     ArrayList<Vertex> vertices;
 
     public Graph(String str) {
-        /* по-хорошему, нужно добавить синтаксический анализатор,
-         * но пока будем считать, что пользователь знает, что делает */
+        currI = currJ = currK = 0;
+        vertices = new ArrayList<Vertex>();
         String[] edges = str.split("\n");
         Connection[][] tmp = new Connection[edges.length * 2][];
-        for (Connection[] conn : tmp) {
-            conn = new Connection[edges.length * 2];
+        for (int i = 0; i < tmp.length; i++) {
+            tmp[i] = new Connection[edges.length * 2];
         }
         for (String edge: edges) {
             Vertex ver = new Vertex(edge.charAt(0));
+            System.out.println(edge);
             if (!vertices.contains(ver)) {
                 vertices.add(ver);
             }
@@ -26,7 +30,7 @@ public class Graph {
                 vertices.add(ver);
             }
             int ind2 = vertices.indexOf(ver);
-            tmp[ind1][ind2] = new Connection(edge.charAt(4) - '0', "" + edge.charAt(0) + edge.charAt(2));
+            tmp[ind1][ind2] = new Connection(Integer.valueOf(edge.substring(4)), "" + edge.charAt(0) + edge.charAt(2));
         }
         matrix = new Connection[vertices.size()][];
         for (int n = 0; n < matrix.length; n++) {
@@ -41,20 +45,70 @@ public class Graph {
                 }
             }
         }
+        verNum = vertices.size();
+    }
 
+    public void reset() {
+        currI = currJ = currK = 0;
+        for (int n = 0; n < matrix.length; n++) {
+            for (int m = 0; m < matrix.length; m++) {
+                String path = "";
+                if (n == m) {
+                    path += vertices.get(m).getName();
+                } else if (matrix[n][m].getWeight() > 0) {
+                    path = path + vertices.get(n).getName() + vertices.get(m).getName();
+                }
+                matrix[n][m].changePath(matrix[n][m].getWeight(), path);
+            }
+        }
     }
 
     public void FloydWarshall() {
-        for (int k = 0; k < verNum; k++) {
-            for (int i = 0; i < verNum; i++) {
-                for (int j = 0; j < verNum; j++) {
-                    if (matrix[i][j].getPathLength() < 0 || matrix[i][j].getPathLength() >
-                            (matrix[i][k].getPathLength() + matrix[k][j].getPathLength())) {
-                        matrix[i][j].changePath(matrix[i][k].getPathLength() + matrix[k][j].getPathLength(),
-                                matrix[i][k].getPath() + matrix[k][j].getPath().substring(1));
+        for (currK = 0; currK < verNum; currK++) {
+            for (currI = 0; currI < verNum; currI++) {
+                for (currJ = 0; currJ < verNum; currJ++) {
+
+                    if (matrix[currI][currK].getPathLength() < 0 || matrix[currK][currJ].getPathLength() < 0) {
+                        continue;
+                    }
+
+                    if (matrix[currI][currJ].getPathLength() < 0 ||  matrix[currI][currJ].getPathLength() >
+                            (matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength())) {
+                        matrix[currI][currJ].changePath(matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength(),
+                                matrix[currI][currK].getPath() + matrix[currK][currJ].getPath().substring(1));
                     }
                 }
             }
+        }
+    }
+
+    public void FloydWarshallStep() {
+        //я думаю, эту проверку нужно вынести в вызывающий метод и там выводить сообщение о том,
+        //что алгоритм закончился
+        if (currI == (verNum - 1) && currJ == (verNum - 1) && currK == (verNum - 1)) {
+            return;
+        }
+        if (matrix[currI][currK].getPathLength() < 0 || matrix[currK][currJ].getPathLength() < 0) {
+            return;
+        }
+
+        if (matrix[currI][currJ].getPathLength() < 0 ||  matrix[currI][currJ].getPathLength() >
+                (matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength())) {
+            matrix[currI][currJ].changePath(matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength(),
+                    matrix[currI][currK].getPath() + matrix[currK][currJ].getPath().substring(1));
+        }
+        if (currJ < (verNum - 1)) {
+            currJ++;
+            return;
+        } else if (currI < (verNum - 1)) {
+            currJ = 0;
+            currI++;
+            return;
+        } else if (currK < (verNum - 1)) {
+            currJ = 0;
+            currI = 0;
+            currK++;
+            return;
         }
     }
 
