@@ -11,23 +11,28 @@ public class Inter extends JFrame {
     private JPanel contentPane;
     private JButton readGraphFromFileButton;
     private JButton generateRandomGraphButton;
-    private JTextArea textArea;
     private JButton stepByStepButton;
     private JTable graphMatrix;
+    private JTable endMatrix;
+
     private JTextArea lgraph;
-    private  JPanel graph;
+    private JPanel graph;
     private JButton readGraphFromKeyboardButton;
     private JButton drawGraphButton;
     private JButton runAlgorithmButton;
     private JButton saveResultToFileButton;
     private JButton aboutAlgorithmButton;
     private JButton helpButton;
+    private GraphController n;
+    private JPanel startMatrix;
+    private JPanel resultMatrix;
 
     private Input inputWin;
     private String input;
 
     public Inter() {
         setUI();
+        n = new GraphController();
         inputWin = new Input();
         inputWin.setBounds(150, 100, 320, 330);
         readGraphFromFileButton.addActionListener(new ActionListener() {
@@ -118,17 +123,7 @@ public class Inter extends JFrame {
 
     private void setUI(){
 
-        /*
-        Цвета для того, чтобы показать, как все делится.
-        Лучше ipady, gridy и все такое часто не трогать, а то я хз, что там действительно влияет на расположение, а что
-        уже нет
-        Наверно для всех JPanel лучше отдельные методы создать, чтобы было аккуратнее и чище
-        И мне не нравится, что при запуске программы сразу не открывается большое окно, а его нужно растягивать. Я не знаю,
-        как это исправить
-        */
-
         contentPane = new JPanel();
-        //contentPane.setSize(1920, 1080);
 
         contentPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         contentPane.setLayout(new GridBagLayout());
@@ -146,20 +141,23 @@ public class Inter extends JFrame {
         lgraph = new JTextArea("Тут будет текущий граф");
         lgraph.setLineWrap(true);
         lgraph.setEditable(false);
-        lgraph.setCaretColor(new Color(0x030311));
         lgraph.setForeground(new Color(0x030311));
         lgraph.setBackground(new Color(0xFFFFFF));
-        lgraph.setFont(new Font("Arial", Font.TYPE1_FONT, 15));
+        lgraph.setFont(new Font("TimesRoman", 0, 15));
         lgraph.setMinimumSize(new Dimension(100, 100));
         graph.add(lgraph);
 
         JPanel tables = new JPanel();
         tables.setLayout(new GridLayout(2, 1));
-        JPanel startMatrix = new JPanel();
-        startMatrix.setBackground(new Color(0xB50000));
+        graphMatrix = new JTable();
+        startMatrix = new JPanel();
+        startMatrix.add(graphMatrix);
+        startMatrix.setBackground(new Color(0xFFEFED));
 
-        JPanel resultMatrix = new JPanel();
-        resultMatrix.setBackground(new Color(0x00BB));
+        endMatrix = new JTable();
+        resultMatrix = new JPanel();
+        resultMatrix.add(endMatrix);
+        resultMatrix.setBackground(new Color(0xFCFFE0));
         tables.add(startMatrix);
         tables.add(resultMatrix);
 
@@ -243,47 +241,30 @@ public class Inter extends JFrame {
             while((c=reader.read())!=-1){
                 input += (char)c;
             }
-            System.out.println(input);
+
+            n.consoleReader(input);
+
             lgraph.setText(input);
             graph.add(lgraph);
         }
     }
 
     private void onRandom() {
-        /*JDialog frame = new JDialog();
-        frame.setVisible(true);
-        frame.setBounds(250,250, 300, 300);
-        frame.setModal(true);*/
-
+        startMatrix.remove(graphMatrix);
 
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерафия случайного графа", JOptionPane.PLAIN_MESSAGE);
         System.out.println(input);
+        n.randomGraph(input);
+
+        graphMatrix = n.drawMatrix();
+        startMatrix.add(graphMatrix);
+
+        lgraph.setText(n.saveRes());
+        graph.add(lgraph);
     }
 
     private void onDraw () {
-
-        JFrame frame = new JFrame();
-        frame.setVisible(true);
-        frame.setBounds(250,250, 300, 300);
-
-        class GComp extends JComponent {
-            protected void paintComponent(Graphics g) {
-                Font font = new Font("Ariel", Font.BOLD, 25);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setFont(font);
-                Line2D l2 = new Line2D.Double(1, 1, 100, 100);
-                Rectangle rec = new Rectangle(10, 10, 30, 30);
-                Ellipse2D ell = new Ellipse2D.Double(30, 50, 100, 100);
-                g2.draw(rec);
-                g2.draw(ell);
-                g2.draw(l2);
-            }
-        }
-
-
-        frame.add(new GComp());
-        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+        n.drawGraph();
     }
 
     private void onSave (){
@@ -291,8 +272,17 @@ public class Inter extends JFrame {
     }
 
     private void onStep (){
+        resultMatrix.remove(endMatrix);
+        String in = n.doStep();
+
+        endMatrix = n.drawMatrix();
+        resultMatrix.add(endMatrix);
+        lgraph.setText(in);
+        graph.add(lgraph);
+        this.revalidate();
 
     }
+
 
     private void onHelp (){
         JFrame frame = new JFrame();
@@ -301,6 +291,12 @@ public class Inter extends JFrame {
     }
 
     private void onRun (){
+        resultMatrix.remove(endMatrix);
+        n.doAll();
+
+        endMatrix = n.drawMatrix();
+        resultMatrix.add(endMatrix);
+        this.revalidate();
 
     }
 
@@ -311,10 +307,16 @@ public class Inter extends JFrame {
     }
 
     private void onConsole(){
+        startMatrix.remove(graphMatrix);
+
         inputWin.setVisible(true);
         input = inputWin.getInputText();
 
-        System.out.println("[" + input + "]");
+        n.consoleReader(input);
+
+        graphMatrix = n.drawMatrix();
+        startMatrix.add(graphMatrix);
+
         lgraph.setText(input);
         graph.add(lgraph);
     }

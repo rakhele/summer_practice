@@ -1,10 +1,12 @@
 package project.orange;
 
-import java.util.ArrayList;
+
+import javax.swing.*;
+import java.util.ArrayList
 
 public class GraphController {
     private /* ??? */ Graph graph;
-    //GraphDrawer drawer;
+    GraphDrawer drawer;
     static final int maxVertices = 10;
     static final int maxWeight = 100;
 
@@ -25,6 +27,7 @@ public class GraphController {
             return;
         }
         graph = new Graph(input);
+        drawer = new GraphDrawer(getVertex(), getMatrix());
         getCurrentState();
     }
 
@@ -32,6 +35,7 @@ public class GraphController {
         if (input == null) { return; }
         int verNum = Integer.valueOf(input);
         graph = GraphGenerator.generateRandom(verNum);
+        drawer = new GraphDrawer(getVertex(), getMatrix());
         getCurrentState();
     }
 
@@ -75,6 +79,11 @@ public class GraphController {
 
     public String doStep() {
         if (graph == null) {
+            //сообщение об ошибке?
+            return "ERROR";
+        }
+        String res = graph.FloydWarshallStep();
+        getCurrentState();
             return "Граф не существует!";
         }
         String res = graph.FloydWarshallStep();
@@ -95,7 +104,17 @@ public class GraphController {
         System.out.println(res);
     }
 
+
+    public String getVertex(){
+       return graph.getVertices();
+    }
+
+    public int[][] getMatrix(){
+        return graph.getMatrix();
+    }
+
     public void saveRes() {
+
         int[][] matrix = graph.getMatrix();
         String vertexList = graph.getVertices();
 
@@ -107,13 +126,41 @@ public class GraphController {
             }
         }
         System.out.println(res);
+        return  res;
     }
 
     public void drawGraph() {
-
+        drawer.setVisile();
     }
 
-    public void drawMatrix() {
+    public JTable drawMatrix() {
+        String infinitySymbol = String.valueOf(Character.toString('\u221E'));
 
+        int[][] g =  getMatrix();
+        String in = getVertex();
+        Object[][] m = new Object[in.length() + 1][in.length() + 1];
+        Character[] f = new Character[in.length() + 1];
+        Integer e = -1;
+        for(int i  = 0; i < in.length() + 1; i++){
+            if(i == 0) f[i] = ' ';
+            else f[i] = in.charAt(i - 1);
+        }
+
+
+        for(int i  = 0; i < in.length() + 1; i++){
+            for(int j  = 0; j < in.length() + 1; j++){
+                if(i == 0 && j == 0) m[0][0] = ' ';
+                else if(i == 0) m[0][j] = in.charAt(j - 1);
+                else if(j == 0) m[i][0] = in.charAt(i - 1);
+                else  m[i][j] = g[i - 1][j - 1];
+                if(m[i][j] == e) m[i][j] = infinitySymbol;
+            }
+        }
+
+        JTable graphMatrix = new JTable(m, f);
+        for(int i  = 0; i < in.length() + 1; i++){
+            graphMatrix.getColumnModel().getColumn(i).setPreferredWidth(30);
+        }
+        return graphMatrix;
     }
 }

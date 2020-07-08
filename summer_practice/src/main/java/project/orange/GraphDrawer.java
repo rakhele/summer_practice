@@ -6,7 +6,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-public class GraphDrower {
+public class GraphDrawer {
     private int radius = 30;
     private double bigRadius;
     private int vertexCount;
@@ -16,7 +16,7 @@ public class GraphDrower {
     private JFrame frame;
     private Graphics2D g2;
 
-    public GraphDrower(String vertexes, int[][] sizes){
+    public GraphDrawer(String vertexes, int[][] sizes){
         vertexCount = vertexes.length();
         dVertexes = new VertexDraw[vertexCount];
         dLines = new LineDraw[vertexCount*vertexCount];
@@ -91,7 +91,7 @@ public class GraphDrower {
                     ell = new Ellipse2D.Float(dVertexes[i].getX(), dVertexes[i].getY(), radius, radius);
 
 
-                    g2.setColor(new Color(0x00FFED));
+                    g2.setColor(new Color(0xFFDF48));
                     g2.fill(ell);
                     g2.setColor(new Color(0x0C0C06));
 

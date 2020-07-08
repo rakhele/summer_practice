@@ -34,7 +34,7 @@ public class Input extends JDialog {
         mainPane.setLayout(r);
 
 
-        textArea = new JTextArea("hello :)");
+        textArea = new JTextArea("");
         mainPane.add(textArea);
 
         mainPane.add(textArea);
@@ -45,29 +45,15 @@ public class Input extends JDialog {
         setContentPane(contentPane);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-        confermButton = new JButton("Подтвердить");
-        confermButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                onConferm();
-            }
-        });
-        constraints.ipady = 0;
-        constraints.gridy = 10;
-        constraints.gridx = 0;
-        constraints.weighty = 0.05;
-       // constraints.anchor = GridBagConstraints.PAGE_END;
-        constraints.gridheight = 5;
-        //constraints.
-        //r.addLayoutComponent("best Button", confermButton);
-        mainPane.add(confermButton, constraints);
+        JTextArea lgraph = new JTextArea("Правила ввода графа:\nПетли запрещены, граф предполагается связным\nНа вход подаются ребра вида:\n  вершина1 вершина2 вес ребра\nВершины именуются !одним! символом");
+        lgraph.setLineWrap(true);
+        lgraph.setEditable(false);
+        //lgraph.setForeground(new Color(0x030311));
+        //lgraph.setBackground(new Color(0xFFFFFF));
+        lgraph.setMinimumSize(new Dimension(100, 100));
+        mainPane.add(lgraph);
 
 
-    }
-
-    private void onConferm(){
-        textInput = textArea.getText();
-        return;
     }
 
     public String getInputText(){
