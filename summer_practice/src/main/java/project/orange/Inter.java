@@ -183,8 +183,6 @@ public class Inter extends JFrame {
         constraints.gridheight = 1;
         contentPane.add(buttonsPanel, constraints);
 
-
-
         setContentPane(contentPane);
         setVisible(true);
     }
@@ -242,7 +240,10 @@ public class Inter extends JFrame {
                 input += (char)c;
             }
 
-            n.consoleReader(input);
+            if (!n.consoleReader(input)){
+                JOptionPane.showMessageDialog(Inter.this, "Неверная запись графа", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             lgraph.setText(input);
             graph.add(lgraph);
@@ -254,7 +255,10 @@ public class Inter extends JFrame {
 
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерафия случайного графа", JOptionPane.PLAIN_MESSAGE);
         System.out.println(input);
-        n.randomGraph(input);
+        if (!n.randomGraph(input)){
+            JOptionPane.showMessageDialog(Inter.this, "Неверное количество вершин", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
@@ -264,16 +268,21 @@ public class Inter extends JFrame {
     }
 
     private void onDraw () {
-        n.drawGraph();
+        if (!n.drawGraph()){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void onSave (){
-
     }
 
     private void onStep (){
         resultMatrix.remove(endMatrix);
         String in = n.doStep();
+        if (in == null){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         endMatrix = n.drawMatrix();
         resultMatrix.add(endMatrix);
@@ -292,7 +301,10 @@ public class Inter extends JFrame {
 
     private void onRun (){
         resultMatrix.remove(endMatrix);
-        n.doAll();
+        if (!n.doAll()){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         endMatrix = n.drawMatrix();
         resultMatrix.add(endMatrix);
@@ -312,7 +324,10 @@ public class Inter extends JFrame {
         inputWin.setVisible(true);
         input = inputWin.getInputText();
 
-        n.consoleReader(input);
+        if (!n.consoleReader(input)){
+            JOptionPane.showMessageDialog(Inter.this, "Неверная запись графа", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
