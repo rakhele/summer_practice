@@ -99,9 +99,7 @@ public class Graph {
             res = res + "  Hовый путь: " + matrix[currI][currJ].getPath() + "; длина нового пути: "
                     + matrix[currI][currJ].getPathLength();
         } else {
-            res = "Путь не был изменен.\n  Путь из вершины " + vertices.get(currI).getName() + " в вершину "
-                    + vertices.get(currJ).getName() + ": " + matrix[currI][currJ].getPath() + "; длина пути: "
-                    + matrix[currI][currJ].getPathLength();
+            res = "Путь не был изменен.\n  Путь из вершины " + vertices.get(currI).getName() + " в вершину " + vertices.get(currJ).getName() + ": " + matrix[currI][currJ].getPath() + "; длина пути: " + matrix[currI][currJ].getPathLength();
         }
 
         if (currJ < (verNum - 1)) {
