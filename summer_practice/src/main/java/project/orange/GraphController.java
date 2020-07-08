@@ -1,8 +1,12 @@
 package project.orange;
 
+import java.util.ArrayList;
+
 public class GraphController {
     private /* ??? */ Graph graph;
     //GraphDrawer drawer;
+    static final int maxVertices = 10;
+    static final int maxWeight = 100;
 
     public void fileReader(String input) {
         if (!syntaxAnalizer(input)) {
@@ -31,13 +35,28 @@ public class GraphController {
         getCurrentState();
     }
 
-    private boolean syntaxAnalizer(String input) {
+    protected boolean syntaxAnalizer(String input) {
         if (input == null) {
             return false;
         }
+
+        ArrayList<Character> vertices = new ArrayList<>();
+
         String[] edges = input.split("\n");
         for (String str: edges) {
             if (!str.matches("^[a-zA-Zа-яА-ЯёЁ] [a-zA-Zа-яА-ЯёЁ] \\d+")) {
+                return false;
+            }
+            if (!vertices.contains(str.charAt(0))){
+                vertices.add(str.charAt(0));
+            }
+            if (!vertices.contains(str.charAt(2))){
+                vertices.add(str.charAt(2));
+            }
+            if (vertices.size() > maxVertices){
+                return false;
+            }
+            if (Integer.valueOf(str.substring(4)) > maxWeight || Integer.valueOf(str.substring(4)) < 1){
                 return false;
             }
         }
