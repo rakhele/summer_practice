@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class GraphGenerator {
     static Vertex[] vertices;
-    static final int maxVertices = 10;
-    static final int maxWeight = 100;
+    static final int maxVertices = GraphController.maxVertices;
+    static final int maxWeight = GraphController.maxWeight;
     static final Random random = new Random();
 
     public static Graph generateRandom(int numVertices) {
-        if (numVertices > maxVertices || numVertices < 0) {
+        if (numVertices > maxVertices || numVertices < 2) { // если одна вершина, то в Graph вылезают ошибки
             return null; // по-хорошему нужно кинуть исключение и в inter его обработать
         }
 
@@ -21,6 +21,12 @@ public class GraphGenerator {
 
         for (int i = 0; i < numVertices; i++){
             int numEdges = random.nextInt(numVertices-1) + 1; // кол-во ребер из вершины
+
+            if (numVertices == 2 && i == 1){ // без этого условия в графе из двух вершин всегда будет два ребра
+                numEdges = random.nextInt(1);
+                if (numEdges == 0)
+                    return new Graph(graph);
+            }
 
             int[] edges = new int[numVertices]; // используемые вершины (изначально все 0 - не используемые)
             edges[i] = 1; // в себя ребро не должно входить
