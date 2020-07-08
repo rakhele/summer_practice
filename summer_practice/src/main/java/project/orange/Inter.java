@@ -270,6 +270,7 @@ public class Inter extends JFrame {
     private void onDraw () {
         if (!n.drawGraph()){
             JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
         }
     }
 
