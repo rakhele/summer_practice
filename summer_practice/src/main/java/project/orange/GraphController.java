@@ -10,22 +10,24 @@ public class GraphController {
     static final int maxWeight = 100;
 
 
-    public void consoleReader(String input) {
+    public boolean consoleReader(String input) {
         if (!syntaxAnalizer(input)) {
-            return;
+            return false;
         }
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
 
         getCurrentState();
+        return true;
     }
 
-    public void randomGraph(String input) {
-        if (input == null) { return; }
+    public boolean randomGraph(String input) {
+        if (input == null) { return false; }
         int verNum = Integer.valueOf(input);
         graph = GraphGenerator.generateRandom(verNum);
         drawer = new GraphDrawer(getVertex(), getMatrix());
         getCurrentState();
+        return true;
     }
 
     protected boolean syntaxAnalizer(String input) {

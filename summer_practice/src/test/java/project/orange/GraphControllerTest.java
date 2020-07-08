@@ -10,21 +10,17 @@ public class GraphControllerTest {
     GraphController controller = new GraphController();
 
     @Test
-    @Ignore
-    public void fileReader() {
-        // если метод будет кидать исключение или возвращать bool, то написать тест
-    }
-
-    @Test
-    @Ignore
     public void consoleReader() {
-        // тоже самое
+        assertTrue(controller.consoleReader("a b 1"));
+        assertTrue(controller.consoleReader("a w 5\nd a 2"));
+        assertFalse(controller.consoleReader("a b 0"));
+        assertFalse(controller.consoleReader("aq we 200\n"));
     }
 
     @Test
-    @Ignore
     public void randomGraph() {
-        //
+        assertFalse(controller.randomGraph(null));
+        assertTrue(controller.randomGraph("4"));
     }
 
     @Test

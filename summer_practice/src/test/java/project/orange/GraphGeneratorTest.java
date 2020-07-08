@@ -22,6 +22,7 @@ public class GraphGeneratorTest {
     @Test
     public void testGenerateRandomNumVertices() {
         assertEquals(2, GraphGenerator.generateRandom(2).getVertices().length());
+        assertEquals(4, GraphGenerator.generateRandom(4).getVertices().length());
         assertEquals(GraphGenerator.maxVertices, GraphGenerator.generateRandom(GraphGenerator.maxVertices).getVertices().length());
     }
 
