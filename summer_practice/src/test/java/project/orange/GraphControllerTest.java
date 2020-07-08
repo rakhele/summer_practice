@@ -30,7 +30,7 @@ public class GraphControllerTest {
     @Test
     public void testSyntaxAnalizer(){
         assertTrue(controller.syntaxAnalizer("a v 4\nf q 3"));
-        assertTrue(controller.syntaxAnalizer("r t 0"));
+        assertTrue(controller.syntaxAnalizer("r t 1"));
         assertFalse(controller.syntaxAnalizer(""));
         assertFalse(controller.syntaxAnalizer("ar f 4\na b 2"));
         assertFalse(controller.syntaxAnalizer("a d 4 a s 4"));
