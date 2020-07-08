@@ -1,26 +1,14 @@
 package project.orange;
 
-
 import javax.swing.*;
-import java.util.ArrayList
+import java.util.ArrayList;
 
 public class GraphController {
-    private /* ??? */ Graph graph;
+    private  Graph graph;
     GraphDrawer drawer;
     static final int maxVertices = 10;
     static final int maxWeight = 100;
 
-    public void fileReader(String input) {
-        if (!syntaxAnalizer(input)) {
-            //нужно вывести сообщение об ошибке
-            //можно попробовать возвращать тру/фолс в интерфейс
-            //и там вызывать диалоговое окно или что-то в этом роде
-            //или кидать и обрабатывать исключение
-            return;
-        }
-        graph = new Graph(input);
-        getCurrentState();
-    }
 
     public void consoleReader(String input) {
         if (!syntaxAnalizer(input)) {
@@ -28,6 +16,7 @@ public class GraphController {
         }
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
+
         getCurrentState();
     }
 
@@ -72,6 +61,8 @@ public class GraphController {
             //сообщение об ошибке?
             return;
         }
+
+
         graph.FloydWarshall();
         System.out.println("Алгоритм выполнен\n");
         getCurrentState();
@@ -84,9 +75,6 @@ public class GraphController {
         }
         String res = graph.FloydWarshallStep();
         getCurrentState();
-            return "Граф не существует!";
-        }
-        String res = graph.FloydWarshallStep();
         return res;
     }
 
@@ -104,17 +92,15 @@ public class GraphController {
         System.out.println(res);
     }
 
-
     public String getVertex(){
-       return graph.getVertices();
+        return graph.getVertices();
     }
 
     public int[][] getMatrix(){
         return graph.getMatrix();
     }
 
-    public void saveRes() {
-
+    public String saveRes() {
         int[][] matrix = graph.getMatrix();
         String vertexList = graph.getVertices();
 
@@ -163,4 +149,6 @@ public class GraphController {
         }
         return graphMatrix;
     }
+
+
 }
