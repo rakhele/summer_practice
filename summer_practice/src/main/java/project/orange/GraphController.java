@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class GraphController {
-    private  Graph graph;
+    private Graph graph;
     GraphDrawer drawer;
     static final int maxVertices = 10;
     static final int maxWeight = 100;
@@ -25,6 +25,9 @@ public class GraphController {
         if (input == null) { return false; }
         int verNum = Integer.valueOf(input);
         graph = GraphGenerator.generateRandom(verNum);
+        if (graph == null){
+            return false;
+        }
         drawer = new GraphDrawer(getVertex(), getMatrix());
         getCurrentState();
         return true;
@@ -58,22 +61,20 @@ public class GraphController {
         return true;
     }
 
-    public void doAll() {
+    public boolean doAll() {
         if (graph == null) {
-            //сообщение об ошибке?
-            return;
+            return false;
         }
-
-
         graph.FloydWarshall();
         System.out.println("Алгоритм выполнен\n");
         getCurrentState();
+        return true;
     }
 
     public String doStep() {
         if (graph == null) {
             //сообщение об ошибке?
-            return "ERROR";
+            return null;
         }
         String res = graph.FloydWarshallStep();
         getCurrentState();
@@ -81,6 +82,10 @@ public class GraphController {
     }
 
     public void getCurrentState() {
+        if (graph == null){
+            return;
+        }
+
         int[][] matrix = graph.getMatrix();
         String vertexList = graph.getVertices();
 
@@ -95,14 +100,17 @@ public class GraphController {
     }
 
     public String getVertex(){
-        return graph.getVertices();
+        return ((graph == null) ? null : graph.getVertices());
     }
 
     public int[][] getMatrix(){
-        return graph.getMatrix();
+        return ((graph == null) ? null : graph.getMatrix());
     }
 
     public String saveRes() {
+        if (graph == null) {
+            return null;
+        }
         int[][] matrix = graph.getMatrix();
         String vertexList = graph.getVertices();
 
@@ -114,11 +122,14 @@ public class GraphController {
             }
         }
         System.out.println(res);
-        return  res;
+        return res;
     }
 
-    public void drawGraph() {
+    public boolean drawGraph() {
+        if (graph == null)
+            return false;
         drawer.setVisile();
+        return true;
     }
 
     public JTable drawMatrix() {
