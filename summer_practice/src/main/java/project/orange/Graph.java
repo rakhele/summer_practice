@@ -82,34 +82,39 @@ public class Graph {
         }
     }
 
-    public void FloydWarshallStep() {
-        //я думаю, эту проверку нужно вынести в вызывающий метод и там выводить сообщение о том,
-        //что алгоритм закончился
+    public String FloydWarshallStep() {
+        String res;
         if (currI == (verNum - 1) && currJ == (verNum - 1) && currK == (verNum - 1)) {
-            return;
+            res = "Алгоритм был завершен.";
+            return res;
         }
         if (matrix[currI][currK].getPathLength() < 0 || matrix[currK][currJ].getPathLength() < 0) {
-            return;
-        }
-
-        if (matrix[currI][currJ].getPathLength() < 0 ||  matrix[currI][currJ].getPathLength() >
+            res = "Нельзя построить новый путь.";
+        } else if (matrix[currI][currJ].getPathLength() < 0 ||  matrix[currI][currJ].getPathLength() >
                 (matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength())) {
+            res = "Путь из вершины " + vertices.get(currI).getName() + " в вершину "
+                    + vertices.get(currJ).getName() + "был изменен. Старый путь: " + matrix[currI][currJ].getPath() + "; ";
             matrix[currI][currJ].changePath(matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength(),
                     matrix[currI][currK].getPath() + matrix[currK][currJ].getPath().substring(1));
+            res = res + "новый путь: " + matrix[currI][currJ].getPath() + "; длина нового пути: "
+                    + matrix[currI][currJ].getPathLength();
+        } else {
+            res = "Путь не был изменен. Путь из вершины " + vertices.get(currI).getName() + " в вершину "
+                    + vertices.get(currJ).getName() + ": " + matrix[currI][currJ].getPath() + "; длина пути: "
+                    + matrix[currI][currJ].getPathLength();
         }
+
         if (currJ < (verNum - 1)) {
             currJ++;
-            return;
         } else if (currI < (verNum - 1)) {
             currJ = 0;
             currI++;
-            return;
         } else if (currK < (verNum - 1)) {
             currJ = 0;
             currI = 0;
             currK++;
-            return;
         }
+        return res;
     }
 
     public String getVertices() {

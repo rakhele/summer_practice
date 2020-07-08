@@ -73,13 +73,12 @@ public class GraphController {
         getCurrentState();
     }
 
-    public void doStep() {
+    public String doStep() {
         if (graph == null) {
-            //сообщение об ошибке?
-            return;
+            return "Граф не существует!";
         }
-        graph.FloydWarshallStep();
-        getCurrentState();
+        String res = graph.FloydWarshallStep();
+        return res;
     }
 
     public void getCurrentState() {
