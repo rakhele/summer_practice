@@ -24,11 +24,12 @@ public class GraphGenerator {
             if(numEdges > numVertices/2) numEdges --;
             if(numEdges > numVertices - 3 && numVertices > 3) numEdges -= 2;
 
+            /*
             if (numVertices == 2 && i == 1){ // без этого условия в графе из двух вершин всегда будет два ребра
                 numEdges = random.nextInt(1);
                 if (numEdges == 0)
                     return new Graph(graph);
-            }
+            }*/
 
             int[] edges = new int[numVertices]; // используемые вершины (изначально все 0 - не используемые)
             edges[i] = 1; // в себя ребро не должно входить
