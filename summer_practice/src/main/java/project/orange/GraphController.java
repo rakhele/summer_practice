@@ -162,6 +162,7 @@ public class GraphController {
 
     public void weightChange(int i, int j, int weight) {
         graph.changeEdgeWeight(i, j, weight);
+        drawer = new GraphDrawer(getVertex(), getMatrix());
     }
 
     public boolean addEdge(String string){
@@ -184,7 +185,8 @@ public class GraphController {
             return false;
         }
 
-        // вызов метода
+        graph.addEdge(string);
+        drawer = new GraphDrawer(getVertex(), getMatrix());
 
         return true;
     }
@@ -211,7 +213,8 @@ public class GraphController {
         if (count != 2)
             return false;
 
-        // вызов методы
+        graph.deleteEdge(string);
+        drawer = new GraphDrawer(getVertex(), getMatrix());
 
         return true;
     }

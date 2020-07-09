@@ -3,7 +3,7 @@ package project.orange;
 import java.util.ArrayList;
 
 public class Graph {
-    private final int verNum;
+    private int verNum;
     private int currI;
     private int currJ;
     private int currK;
@@ -151,6 +151,57 @@ public class Graph {
             matrix[i][j].changeWeight(newWeight);
             matrix[i][j].changePath(newWeight, "" + vertices.get(i).getName() + vertices.get(j).getName());
         }
+    }
+
+    public boolean addEdge(String edge) {
+        if (edge == null) { return false; }
+        Vertex ver = new Vertex(edge.charAt(0));
+        if (!vertices.contains(ver)) {
+            vertices.add(ver);
+        }
+        int ind1 = vertices.indexOf(ver);
+        ver = new Vertex(edge.charAt(2));
+        if (!vertices.contains(ver)) {
+            vertices.add(ver);
+        }
+        int ind2 = vertices.indexOf(ver);
+
+        if (vertices.size() > matrix.length) {
+            Connection[][] tmp = new Connection[vertices.size()][];
+            for (int n = 0; n < vertices.size(); n++) {
+                tmp[n] = new Connection[vertices.size()];
+                for (int m = 0; m < vertices.size(); m++) {
+                    if (m < matrix.length && n < matrix.length) {
+                        tmp[n][m] = matrix[n][m];
+                    } else if (m == n) {
+                        tmp[n][m] = new Connection(0, "" + vertices.get(m).getName());
+                    } else {
+                        tmp[n][m] = new Connection(-1, "");
+                    }
+                }
+            }
+            matrix = tmp;
+            verNum = vertices.size();
+        }
+        matrix[ind1][ind2] = new Connection(Integer.valueOf(edge.substring(4)), "" + edge.charAt(0) + edge.charAt(2));
+        return true;
+    }
+
+    public boolean deleteEdge(String edge) {
+        if (edge == null) { return false; }
+        Vertex ver = new Vertex(edge.charAt(0));
+        if (!vertices.contains(ver)) {
+            return false;
+        }
+        int ind1 = vertices.indexOf(ver);
+        ver = new Vertex(edge.charAt(2));
+        if (!vertices.contains(ver)) {
+            return false;
+        }
+        int ind2 = vertices.indexOf(ver);
+
+        matrix[ind1][ind2] = new Connection(-1, "");
+        return true;
     }
 
 }
