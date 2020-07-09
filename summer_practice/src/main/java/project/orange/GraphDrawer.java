@@ -10,11 +10,12 @@ public class GraphDrawer {
     private int radius = 30;
     private double bigRadius;
     private int vertexCount;
-    private int EdgesCount;
+    private int edgesCount;
     private VertexDraw[] dVertexes;
     private LineDraw[] dLines;
     private JFrame frame;
     private Graphics2D g2;
+
 
     public GraphDrawer(String vertexes, int[][] sizes){
         vertexCount = vertexes.length();
@@ -24,14 +25,16 @@ public class GraphDrawer {
             dVertexes[i] = new VertexDraw(vertexes.charAt(i));
         }
         setVertexCoords();
-        EdgesCount = 0;
+        edgesCount = 0;
         for(int i = 0; i < vertexCount; i++){
             for(int j = 0; j < vertexCount; j++){
                 if(i == j){}
                 else{
                     if(sizes[i][j] > 0){
-                        dLines[EdgesCount] = new LineDraw(dVertexes[i], dVertexes[j], sizes[i][j]);
-                        EdgesCount++;
+                        dLines[edgesCount] = new LineDraw(dVertexes[j] , dVertexes[i], sizes[i][j]);
+                        edgesCount++;
+                        if(i > j && sizes[j][i] > 0) dLines[edgesCount - 1].setPareModificate(7);
+                        if(i < j && sizes[j][i] > 0) dLines[edgesCount - 1].setPareModificate(-7);
                     }
                 }
             }
@@ -46,7 +49,7 @@ public class GraphDrawer {
         //bigRadius = (vertexCount/2 + 1)*radius;
         double ang = 0;
         double step = (2 * Math.PI )/ vertexCount;
-        int minGap = 10;
+        int minGap = 25;
         bigRadius =  (Math.sqrt(2) * radius) / step + radius + minGap;
         int curx, cury;
         int centerx =  (int)bigRadius + radius + 5;
@@ -69,6 +72,7 @@ public class GraphDrawer {
 
     }
 
+
     private void makeFrame(){
         frame = new JFrame();
         frame.setBounds(200,180, 500, 450);
@@ -77,36 +81,23 @@ public class GraphDrawer {
             protected void paintComponent(Graphics g) {
                 g2 = (Graphics2D) g;
                 Line2D l;
-                Rectangle2D p;
+                boolean edgePair = false;
 
-                for(int i = 0; i < EdgesCount; i++){
-                    l = new Line2D.Float(dLines[i].getFromX() + radius/2, dLines[i].getFromY()+radius/2, dLines[i].getToX()+radius/2, dLines[i].getToY()+radius/2);
-                    g2.draw(l);
-                    //p = new Rectangle2D.Float(dLines[i].getToX(), dLines[i].getToY(), 5, 5);
-                   // g2.fill(p);
+                for(int i = 0; i < edgesCount; i++){
+                    dLines[i].drawEdge(g2, radius);
                 }
-
-                Ellipse2D ell;
                 for(int i = 0; i < vertexCount; i++){
-                    ell = new Ellipse2D.Float(dVertexes[i].getX(), dVertexes[i].getY(), radius, radius);
-
-
-                    g2.setColor(new Color(0xFFDF48));
-                    g2.fill(ell);
-                    g2.setColor(new Color(0x0C0C06));
-
-                    g2.drawString(dVertexes[i].getName(), (int)ell.getCenterX() -2, (int)ell.getCenterY()+ 3);
+                    dVertexes[i].draw(g2, radius, new Color(0xFFEA2D));
                 }
-
-
-
             }
         }
 
 
         frame.add(new GComp());
         frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+
     }
+
 
     public void setVisile(){
         frame.setVisible(true);

@@ -13,11 +13,11 @@ public class GraphController {
     static final int maxVertices = 10;
     static final int maxWeight = 100;
 
-
     public boolean consoleReader(String input) {
         if (!syntaxAnalyzer(input)) {
             return false;
         }
+        if(drawer != null) drawer.setNonVisile();
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
 
@@ -26,6 +26,7 @@ public class GraphController {
 
     public boolean randomGraph(String input) {
         if (input == null) { return false; }
+        if(drawer != null) drawer.setNonVisile();
         int verNum = Integer.valueOf(input);
         graph = GraphGenerator.generateRandom(verNum);
         if (graph == null){
