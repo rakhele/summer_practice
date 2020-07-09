@@ -1,5 +1,8 @@
 package project.orange;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+
 public class VertexDraw {
     private char name;
     private int x;
@@ -31,6 +34,20 @@ public class VertexDraw {
 
     public int getY(){
         return y;
+    }
+
+    public void draw(Graphics2D g2, int radius, Color c){
+        Ellipse2D ell;
+
+            ell = new Ellipse2D.Float(x - radius/2, y - radius/2, radius, radius);
+
+            g2.setColor(c);
+            g2.fill(ell);
+            g2.setColor(Color.BLACK);
+
+            g2.drawString(getName(), x - 2, y + 5);
+
+
     }
 
 }
