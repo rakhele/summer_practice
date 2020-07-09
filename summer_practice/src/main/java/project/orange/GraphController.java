@@ -1,50 +1,42 @@
 package project.orange;
 
-
 import javax.swing.*;
-import java.util.ArrayList
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class GraphController {
-    private /* ??? */ Graph graph;
+    private Graph graph;
     GraphDrawer drawer;
     static final int maxVertices = 10;
     static final int maxWeight = 100;
 
-<<<<<<< HEAD
-=======
-    public void fileReader(String input) {
-        if (!syntaxAnalizer(input)) {
-            //нужно вывести сообщение об ошибке
-            //можно попробовать возвращать тру/фолс в интерфейс
-            //и там вызывать диалоговое окно или что-то в этом роде
-            //или кидать и обрабатывать исключение
-            return;
-        }
-        graph = new Graph(input);
-        getCurrentState();
-    }
-
->>>>>>> f61e1b1983655ede48427d06cdaf98ee8f7a1c7a
-    public void consoleReader(String input) {
-        if (!syntaxAnalizer(input)) {
-            return;
+    public boolean consoleReader(String input) {
+        if (!syntaxAnalyzer(input)) {
+            return false;
         }
         if(drawer != null) drawer.setNonVisile();
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
-        getCurrentState();
+
+        return true;
     }
 
-    public void randomGraph(String input) {
-        if (input == null) { return; }
+    public boolean randomGraph(String input) {
+        if (input == null) { return false; }
         if(drawer != null) drawer.setNonVisile();
         int verNum = Integer.valueOf(input);
         graph = GraphGenerator.generateRandom(verNum);
+        if (graph == null){
+            return false;
+        }
         drawer = new GraphDrawer(getVertex(), getMatrix());
-        getCurrentState();
+        return true;
     }
 
-    protected boolean syntaxAnalizer(String input) {
+    protected boolean syntaxAnalyzer(String input) {
         if (input == null) {
             return false;
         }
@@ -72,30 +64,29 @@ public class GraphController {
         return true;
     }
 
-    public void doAll() {
+    public boolean doAll() {
         if (graph == null) {
-            //сообщение об ошибке?
-            return;
+            return false;
         }
         graph.FloydWarshall();
-        System.out.println("Алгоритм выполнен\n");
-        getCurrentState();
+        return true;
     }
 
     public String doStep() {
         if (graph == null) {
             //сообщение об ошибке?
-            return "ERROR";
+            return null;
         }
         String res = graph.FloydWarshallStep();
         getCurrentState();
-            return "Граф не существует!";
-        }
-        String res = graph.FloydWarshallStep();
         return res;
     }
 
-    public void getCurrentState() {
+    public String getCurrentState() {
+        if (graph == null){
+            return null;
+        }
+
         int[][] matrix = graph.getMatrix();
         String vertexList = graph.getVertices();
 
@@ -106,36 +97,35 @@ public class GraphController {
                 res = res + " " + matrix[i][j] + "\n";
             }
         }
-        System.out.println(res);
+        return res;
     }
 
-
     public String getVertex(){
-       return graph.getVertices();
+        return ((graph == null) ? null : graph.getVertices());
     }
 
     public int[][] getMatrix(){
-        return graph.getMatrix();
+        return ((graph == null) ? null : graph.getMatrix());
     }
 
-    public void saveRes() {
-
-        int[][] matrix = graph.getMatrix();
-        String vertexList = graph.getVertices();
-
-        String res = "";
-        for (int i = 0; i < vertexList.length(); i++) {
-            for (int j = 0; j < vertexList.length(); j++) {
-                res = res + vertexList.charAt(i) + " " + vertexList.charAt(j);
-                res = res + " " + matrix[i][j] + "\n";
-            }
+    public boolean saveRes(FileWriter writer) {
+        if (graph == null) {
+            return false;
         }
-        System.out.println(res);
-        return  res;
+        try {
+            writer.write(getCurrentState());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+
     }
 
-    public void drawGraph() {
+    public boolean drawGraph() {
+        if (graph == null)
+            return false;
         drawer.setVisile();
+        return true;
     }
 
     public JTable drawMatrix() {
@@ -162,10 +152,16 @@ public class GraphController {
             }
         }
 
+
         JTable graphMatrix = new JTable(m, f);
         for(int i  = 0; i < in.length() + 1; i++){
             graphMatrix.getColumnModel().getColumn(i).setPreferredWidth(30);
         }
         return graphMatrix;
     }
+
+    public void weightChange(int i, int j, int weight) {
+        graph.changeEdgeWeight(i, j, weight);
+    }
+
 }

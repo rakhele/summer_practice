@@ -1,9 +1,15 @@
 package project.orange;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 
 public class Inter extends JFrame {
@@ -93,7 +99,11 @@ public class Inter extends JFrame {
         saveResultToFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                onSave();
+                try {
+                    onSave();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -183,8 +193,6 @@ public class Inter extends JFrame {
         constraints.gridheight = 1;
         contentPane.add(buttonsPanel, constraints);
 
-
-
         setContentPane(contentPane);
         setVisible(true);
     }
@@ -199,7 +207,7 @@ public class Inter extends JFrame {
         buttonsPanel.add(readGraphFromKeyboardButton);
 
         generateRandomGraphButton = new JButton();
-        generateRandomGraphButton.setText("Сгенерировать случаный граф");
+        generateRandomGraphButton.setText("Сгенерировать случайный граф");
         buttonsPanel.add(generateRandomGraphButton);
 
 
@@ -242,7 +250,24 @@ public class Inter extends JFrame {
                 input += (char)c;
             }
 
-            n.consoleReader(input);
+            if (!n.consoleReader(input)){
+                JOptionPane.showMessageDialog(Inter.this, "Неверная запись графа", "Ошибка", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            graphMatrix = n.drawMatrix();
+            graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+                @Override
+                public void tableChanged(TableModelEvent e) {
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    if (row == 0 || column == 0 || row == column) { return; }
+                    TableModel model = (TableModel)e.getSource();
+                    Object data = model.getValueAt(row, column);
+                    n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+                }
+            });
+            startMatrix.add(graphMatrix);
 
             lgraph.setText(input);
             graph.add(lgraph);
@@ -254,35 +279,69 @@ public class Inter extends JFrame {
 
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерафия случайного графа", JOptionPane.PLAIN_MESSAGE);
         System.out.println(input);
-        n.randomGraph(input);
+        if (!n.randomGraph(input)){
+            JOptionPane.showMessageDialog(Inter.this, "Неверное количество вершин", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         startMatrix.add(graphMatrix);
 
-        lgraph.setText(n.saveRes());
+        lgraph.setText(n.getCurrentState());
         graph.add(lgraph);
     }
 
     private void onDraw () {
-        n.drawGraph();
+        if (!n.drawGraph()){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }
 
-    private void onSave (){
-
+    private void onSave() throws IOException {
+        JFileChooser saveFile = new JFileChooser();
+        saveFile.setDialogTitle("Сохранить в файл");
+        saveFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int res = saveFile.showSaveDialog(Inter.this);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            File file = saveFile.getSelectedFile();
+            FileWriter writer = new FileWriter(file);
+            if (n.saveRes(writer)) {
+                JOptionPane.showMessageDialog(Inter.this, "Сохранено в файл" + file, "Сохранено", JOptionPane.PLAIN_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(Inter.this, "Ошибка сохранения", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+            writer.close();
+        }
     }
 
     private void onStep (){
         resultMatrix.remove(endMatrix);
         String in = n.doStep();
+        if (in == null){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         endMatrix = n.drawMatrix();
+        endMatrix.setEnabled(false);
         resultMatrix.add(endMatrix);
         lgraph.setText(in);
         graph.add(lgraph);
         this.revalidate();
 
     }
-
 
     private void onHelp (){
         JFrame frame = new JFrame();
@@ -292,9 +351,13 @@ public class Inter extends JFrame {
 
     private void onRun (){
         resultMatrix.remove(endMatrix);
-        n.doAll();
+        if (!n.doAll()){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         endMatrix = n.drawMatrix();
+        endMatrix.setEnabled(false);
         resultMatrix.add(endMatrix);
         this.revalidate();
 
@@ -312,14 +375,27 @@ public class Inter extends JFrame {
         inputWin.setVisible(true);
         input = inputWin.getInputText();
 
-        n.consoleReader(input);
+        if (!n.consoleReader(input)){
+            JOptionPane.showMessageDialog(Inter.this, "Неверная запись графа", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         startMatrix.add(graphMatrix);
 
         lgraph.setText(input);
         graph.add(lgraph);
     }
-
 
 }
