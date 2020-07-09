@@ -1,6 +1,7 @@
 package project.orange;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
@@ -93,7 +94,11 @@ public class Inter extends JFrame {
         saveResultToFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                onSave();
+                try {
+                    onSave();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -263,7 +268,7 @@ public class Inter extends JFrame {
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
 
-        lgraph.setText(n.saveRes());
+        lgraph.setText(n.getCurrentState());
         graph.add(lgraph);
     }
 
@@ -274,7 +279,21 @@ public class Inter extends JFrame {
         }
     }
 
-    private void onSave (){
+    private void onSave() throws IOException {
+        JFileChooser saveFile = new JFileChooser();
+        saveFile.setDialogTitle("Сохранить в файл");
+        saveFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int res = saveFile.showSaveDialog(Inter.this);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            File file = saveFile.getSelectedFile();
+            FileWriter writer = new FileWriter(file);
+            if (n.saveRes(writer)) {
+                JOptionPane.showMessageDialog(Inter.this, "Сохранено в файл" + file, "Сохранено", JOptionPane.PLAIN_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(Inter.this, "Ошибка сохранения", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+            writer.close();
+        }
     }
 
     private void onStep (){
