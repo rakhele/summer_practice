@@ -2,11 +2,15 @@ package project.orange;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-public class GraphDrawer {
+public class GraphDrawer implements MouseListener, MouseMotionListener {
     private int radius = 30;
     private double bigRadius;
     private int vertexCount;
@@ -15,6 +19,7 @@ public class GraphDrawer {
     private LineDraw[] dLines;
     private JFrame frame;
     private Graphics2D g2;
+    Point2D offSet;
 
 
     public GraphDrawer(String vertexes, int[][] sizes){
@@ -95,7 +100,8 @@ public class GraphDrawer {
 
         frame.add(new GComp());
         frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-
+        frame.addMouseListener(this);
+        frame.addMouseMotionListener(this);
     }
 
 
@@ -107,4 +113,41 @@ public class GraphDrawer {
         frame.setVisible(false);
     }
 
+    private VertexDraw selected = null;
+
+    public void mousePressed(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        for (VertexDraw el : dVertexes) {
+            double coordinates = Math.pow((x - el.getX()), 2) + Math.pow((y - el.getY()), 2);
+            if (coordinates <= Math.pow(bigRadius, 2)) {
+                selected = el;
+                int newX, newY;
+                newX = (x > el.getX() ? x - el.getX() : el.getX() - x);
+                newY = (y > el.getY() ? y - el.getY() : el.getY() - y);
+                offSet = new Point2D.Double(newX, newY);
+                //offSet = new Point2D.Double(x - el.getX(), y - el.getY());
+                break;
+            }
+        }
+    }
+
+    public void mouseClicked(MouseEvent e){}
+    public void mouseReleased(MouseEvent e){
+        frame.setVisible(false);
+        frame.setVisible(true);
+    }
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+
+    public void mouseDragged(MouseEvent e) {
+        if (selected != null){
+            double x = e.getX() - offSet.getX();
+            double y = e.getY() - offSet.getY();
+
+            selected.setCoords((int)x, (int)y);
+
+        }
+    }
+    public void mouseMoved(MouseEvent e){}
 }
