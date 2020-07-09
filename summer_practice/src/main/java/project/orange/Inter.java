@@ -1,10 +1,15 @@
 package project.orange;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 
 public class Inter extends JFrame {
@@ -202,7 +207,7 @@ public class Inter extends JFrame {
         buttonsPanel.add(readGraphFromKeyboardButton);
 
         generateRandomGraphButton = new JButton();
-        generateRandomGraphButton.setText("Сгенерировать случаный граф");
+        generateRandomGraphButton.setText("Сгенерировать случайный граф");
         buttonsPanel.add(generateRandomGraphButton);
 
 
@@ -250,6 +255,20 @@ public class Inter extends JFrame {
                 return;
             }
 
+            graphMatrix = n.drawMatrix();
+            graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+                @Override
+                public void tableChanged(TableModelEvent e) {
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+                    if (row == 0 || column == 0 || row == column) { return; }
+                    TableModel model = (TableModel)e.getSource();
+                    Object data = model.getValueAt(row, column);
+                    n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+                }
+            });
+            startMatrix.add(graphMatrix);
+
             lgraph.setText(input);
             graph.add(lgraph);
         }
@@ -266,6 +285,17 @@ public class Inter extends JFrame {
         }
 
         graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         startMatrix.add(graphMatrix);
 
         lgraph.setText(n.getCurrentState());
@@ -305,13 +335,13 @@ public class Inter extends JFrame {
         }
 
         endMatrix = n.drawMatrix();
+        endMatrix.setEnabled(false);
         resultMatrix.add(endMatrix);
         lgraph.setText(in);
         graph.add(lgraph);
         this.revalidate();
 
     }
-
 
     private void onHelp (){
         JFrame frame = new JFrame();
@@ -327,6 +357,7 @@ public class Inter extends JFrame {
         }
 
         endMatrix = n.drawMatrix();
+        endMatrix.setEnabled(false);
         resultMatrix.add(endMatrix);
         this.revalidate();
 
@@ -350,11 +381,21 @@ public class Inter extends JFrame {
         }
 
         graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         startMatrix.add(graphMatrix);
 
         lgraph.setText(input);
         graph.add(lgraph);
     }
-
 
 }

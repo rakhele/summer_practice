@@ -1,7 +1,7 @@
 package project.orange;
 
 public class Connection {
-    private final int edgeWeight;
+    private int edgeWeight;
     private int pathLength;
     private String path;
 
@@ -25,5 +25,9 @@ public class Connection {
     public void changePath(int pathLength, String path) {
         this.pathLength = pathLength;
         this.path = path;
+    }
+
+    public void changeWeight(int weight) {
+        edgeWeight = weight;
     }
 }
