@@ -1,6 +1,8 @@
 package project.orange;
 
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GraphController {
@@ -11,13 +13,12 @@ public class GraphController {
 
 
     public boolean consoleReader(String input) {
-        if (!syntaxAnalizer(input)) {
+        if (!syntaxAnalyzer(input)) {
             return false;
         }
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
 
-        getCurrentState();
         return true;
     }
 
@@ -29,11 +30,10 @@ public class GraphController {
             return false;
         }
         drawer = new GraphDrawer(getVertex(), getMatrix());
-        getCurrentState();
         return true;
     }
 
-    protected boolean syntaxAnalizer(String input) {
+    protected boolean syntaxAnalyzer(String input) {
         if (input == null) {
             return false;
         }
@@ -66,8 +66,6 @@ public class GraphController {
             return false;
         }
         graph.FloydWarshall();
-        System.out.println("Алгоритм выполнен\n");
-        getCurrentState();
         return true;
     }
 
@@ -81,9 +79,9 @@ public class GraphController {
         return res;
     }
 
-    public void getCurrentState() {
+    public String getCurrentState() {
         if (graph == null){
-            return;
+            return null;
         }
 
         int[][] matrix = graph.getMatrix();
@@ -96,7 +94,7 @@ public class GraphController {
                 res = res + " " + matrix[i][j] + "\n";
             }
         }
-        System.out.println(res);
+        return res;
     }
 
     public String getVertex(){
@@ -107,22 +105,17 @@ public class GraphController {
         return ((graph == null) ? null : graph.getMatrix());
     }
 
-    public String saveRes() {
+    public boolean saveRes(FileWriter writer) {
         if (graph == null) {
-            return null;
+            return false;
         }
-        int[][] matrix = graph.getMatrix();
-        String vertexList = graph.getVertices();
+        try {
+            writer.write(getCurrentState());
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
 
-        String res = "";
-        for (int i = 0; i < vertexList.length(); i++) {
-            for (int j = 0; j < vertexList.length(); j++) {
-                res = res + vertexList.charAt(i) + " " + vertexList.charAt(j);
-                res = res + " " + matrix[i][j] + "\n";
-            }
-        }
-        System.out.println(res);
-        return res;
     }
 
     public boolean drawGraph() {
