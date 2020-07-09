@@ -22,10 +22,11 @@ public class GraphGenerator {
         for (int i = 0; i < numVertices; i++){
             int numEdges = random.nextInt(numVertices-1) + 1;// кол-во ребер из вершины
 
+            /*
             if (numVertices == 2 && i == 1){ // без этого условия в графе из двух вершин всегда будет два ребра
                 numEdges = random.nextInt(2);
-            }
-            else if (numEdges > numVertices/2) {
+            }*/
+            if (numEdges > numVertices/2) {
                 numEdges--;
             }
 

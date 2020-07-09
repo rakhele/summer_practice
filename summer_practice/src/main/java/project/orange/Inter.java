@@ -29,6 +29,8 @@ public class Inter extends JFrame {
     private JButton saveResultToFileButton;
     private JButton aboutAlgorithmButton;
     private JButton helpButton;
+    private JButton addEdge;
+    private JButton deleteEdge;
     private GraphController n;
     private JPanel startMatrix;
     private JPanel resultMatrix;
@@ -114,6 +116,20 @@ public class Inter extends JFrame {
             }
         });
 
+        addEdge.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onAddEdge();
+            }
+        });
+
+        deleteEdge.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onDeleteEdge();
+            }
+        });
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -182,7 +198,7 @@ public class Inter extends JFrame {
 
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(3, 3, 5, 0));
+        buttonsPanel.setLayout(new GridLayout(4, 3, 5, 0));
         setButtons(buttonsPanel);
 
         constraints.ipady = 0;
@@ -235,6 +251,15 @@ public class Inter extends JFrame {
         aboutAlgorithmButton = new JButton();
         aboutAlgorithmButton.setText("Об алгоритме");
         buttonsPanel.add(aboutAlgorithmButton);
+
+        addEdge = new JButton();
+        addEdge.setText("Добавить ребро");
+        buttonsPanel.add(addEdge);
+
+        deleteEdge = new JButton();
+        deleteEdge.setText("Удалить ребро");
+        buttonsPanel.add(deleteEdge);
+
 
     }
 
@@ -396,6 +421,26 @@ public class Inter extends JFrame {
 
         lgraph.setText(input);
         graph.add(lgraph);
+    }
+
+    private void onAddEdge(){
+
+        input = JOptionPane.showInputDialog(this, new String[] {"", "Введите новое ребро: "}, "Создание нового ребра", JOptionPane.PLAIN_MESSAGE);
+
+        if (!n.addEdge(input)){
+            JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+    }
+
+    private void onDeleteEdge(){
+        input = JOptionPane.showInputDialog(this, new String[] {"", "Введите ребро для удаления: "}, "Удаление ребра", JOptionPane.PLAIN_MESSAGE);
+
+        if (!n.deleteEdge(input)){
+            JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }
 
 }

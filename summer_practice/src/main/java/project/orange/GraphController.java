@@ -164,4 +164,56 @@ public class GraphController {
         graph.changeEdgeWeight(i, j, weight);
     }
 
+    public boolean addEdge(String string){
+
+        if (graph == null){
+            return consoleReader(string);
+        }
+
+        if (!syntaxAnalyzer(string)){
+            return false;
+        }
+
+        boolean exist = false;
+        for (Vertex v: graph.vertices){
+            if (v.getName() == string.charAt(0) || v.getName() == string.charAt(2)){
+                exist = true;
+            }
+        }
+        if (!exist){
+            return false;
+        }
+
+        // вызов метода
+
+        return true;
+    }
+
+    public boolean deleteEdge(String string){
+
+        if (graph == null){
+            return false;
+        }
+
+        string += " 1";
+        if (!syntaxAnalyzer(string)){
+            return false;
+        }
+        string = string.substring(0, 3);
+        int count = 0;
+        for (Vertex v: graph.vertices){
+            if (v.getName() == string.charAt(0))
+                count++;
+            else if (v.getName() == string.charAt(2))
+                count++;
+        }
+
+        if (count != 2)
+            return false;
+
+        // вызов методы
+
+        return true;
+    }
+
 }
