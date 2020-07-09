@@ -431,6 +431,21 @@ public class Inter extends JFrame {
             JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        startMatrix.remove(graphMatrix);
+        graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
+        startMatrix.add(graphMatrix);
+        this.revalidate();
 
     }
 
@@ -441,6 +456,21 @@ public class Inter extends JFrame {
             JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        startMatrix.remove(graphMatrix);
+        graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
+        startMatrix.add(graphMatrix);
+        this.revalidate();
     }
 
 }
