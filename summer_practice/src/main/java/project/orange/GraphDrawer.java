@@ -122,7 +122,11 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
             double coordinates = Math.pow((x - el.getX()), 2) + Math.pow((y - el.getY()), 2);
             if (coordinates <= Math.pow(radius, 2)) {
                 selected = el;
-                offSet = new Point2D.Double(x - el.getX(), y - el.getY());
+                int newX, newY;
+                newX = (x > el.getX() ? x - el.getX() : el.getX() - x);
+                newY = (y > el.getY() ? y - el.getY() : el.getY() - y);
+                offSet = new Point2D.Double(newX, newY);
+                //offSet = new Point2D.Double(x - el.getX(), y - el.getY());
                 break;
             }
         }
