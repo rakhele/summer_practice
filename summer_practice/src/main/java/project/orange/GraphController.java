@@ -1,6 +1,8 @@
 package project.orange;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -149,6 +151,7 @@ public class GraphController {
             }
         }
 
+
         JTable graphMatrix = new JTable(m, f);
         for(int i  = 0; i < in.length() + 1; i++){
             graphMatrix.getColumnModel().getColumn(i).setPreferredWidth(30);
@@ -156,5 +159,8 @@ public class GraphController {
         return graphMatrix;
     }
 
+    public void weightChange(int i, int j, int weight) {
+        graph.changeEdgeWeight(i, j, weight);
+    }
 
 }

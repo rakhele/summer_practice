@@ -84,7 +84,7 @@ public class Graph {
 
     public String FloydWarshallStep() {
         String res;
-        if (currI == (verNum - 1) && currJ == (verNum - 1) && currK == (verNum - 1)) {
+        if (currI >= (verNum - 1) && currJ >= (verNum - 1) && currK >= (verNum - 1)) {
             res = "Алгоритм был завершен.";
             return res;
         }
@@ -144,6 +144,13 @@ public class Graph {
             }
         }
         return paths;
+    }
+
+    public void changeEdgeWeight(int i, int j, int newWeight) {
+        if (i != j) {
+            matrix[i][j].changeWeight(newWeight);
+            matrix[i][j].changePath(newWeight, "" + vertices.get(i).getName() + vertices.get(j).getName());
+        }
     }
 
 }
