@@ -20,7 +20,6 @@ public class Graph {
         }
         for (String edge: edges) {
             Vertex ver = new Vertex(edge.charAt(0));
-            System.out.println(edge);
             if (!vertices.contains(ver)) {
                 vertices.add(ver);
             }

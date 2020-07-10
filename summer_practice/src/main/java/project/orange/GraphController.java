@@ -143,6 +143,8 @@ public class GraphController {
     public boolean drawInitialGraph() {
         if (graph == null)
             return false;
+        int[] e = graph.getIJK();
+        startDrawer.drawStep(e);
         startDrawer.setVisile();
         return true;
     }
@@ -254,11 +256,15 @@ public class GraphController {
         return true;
     }
 
-    public void reset() {
+    public boolean reset() {
+        if (graph == null){
+            return false;
+        }
         graph.reset();
         if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
         startDrawer = new GraphDrawer(getVertex(), getEdges());
+        return true;
     }
 
 }

@@ -42,12 +42,12 @@ public class VertexDraw {
 
     public void draw(Graphics2D g2, int radius){
         Ellipse2D ell;
-            ell = new Ellipse2D.Float(x - radius/2, y - radius/2, radius, radius);
-            g2.setColor(c);
-            g2.fill(ell);
-            g2.setColor(Color.BLACK);
+        ell = new Ellipse2D.Float(x - radius/2, y - radius/2, radius, radius);
+        g2.setColor(c);
+        g2.fill(ell);
+        g2.setColor(Color.BLACK);
 
-            g2.drawString(getName(), x - 2, y + 5);
+        g2.drawString(getName(), x - 2, y + 5);
 
 
     }

@@ -307,7 +307,6 @@ public class Inter extends JFrame {
         startMatrix.remove(graphMatrix);
 
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерафия случайного графа", JOptionPane.PLAIN_MESSAGE);
-        System.out.println(input);
         if (!n.randomGraph(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное количество вершин", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
@@ -452,12 +451,13 @@ public class Inter extends JFrame {
     private void onInitialGraph(){
         if (!n.drawInitialGraph()){
             JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
-            return;
         }
     }
 
     private void onResetAlgorithm(){
-        n.reset();
+        if (!n.reset()){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
 }

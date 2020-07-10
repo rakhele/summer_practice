@@ -117,7 +117,8 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
         frame.update(g2);
         frame.repaint();
         frame.invalidate();
-        frame.revalidate();}
+        frame.revalidate();
+    }
 
     public void setVisile(){
         frame.setVisible(true);
