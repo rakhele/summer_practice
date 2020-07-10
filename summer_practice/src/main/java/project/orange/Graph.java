@@ -115,6 +115,11 @@ public class Graph {
         return res;
     }
 
+    public int[] getIJK(){
+        int[] ew = new int[]{currI, currJ, currK};
+        return ew;
+    }
+
     public String getVertices() {
         if (vertices.size() == 0) {
             return null;

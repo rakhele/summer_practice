@@ -79,6 +79,8 @@ public class GraphController {
             //сообщение об ошибке?
             return null;
         }
+        int[] e = graph.getIJK();
+        drawer.drawStep(e);
         String res = graph.FloydWarshallStep();
         getCurrentState();
         return res;
@@ -126,6 +128,8 @@ public class GraphController {
     public boolean drawGraph() {
         if (graph == null)
             return false;
+        int[] e = graph.getIJK();
+        drawer.drawStep(e);
         drawer.setVisile();
         return true;
     }
@@ -175,6 +179,7 @@ public class GraphController {
 
     public void weightChange(int i, int j, int weight) {
         graph.changeEdgeWeight(i, j, weight);
+        if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
     }
 
@@ -199,6 +204,7 @@ public class GraphController {
         }
 
         graph.addEdge(string);
+        if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
 
         return true;
@@ -227,8 +233,8 @@ public class GraphController {
             return false;
 
         graph.deleteEdge(string);
+        if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
-
         return true;
     }
 

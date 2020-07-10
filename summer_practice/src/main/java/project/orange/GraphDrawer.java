@@ -51,7 +51,6 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     }
 
     private void setVertexCoords(){
-        //bigRadius = (vertexCount/2 + 1)*radius;
         double ang = 0;
         double step = (2 * Math.PI )/ vertexCount;
         int minGap = 25;
@@ -77,9 +76,9 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
 
     }
 
-
     private void makeFrame(){
         frame = new JFrame();
+        frame.setTitle("Заданный граф (можно двигать вершины)");
         frame.setBounds(200,180, 500, 450);
 
         class GComp extends JComponent {
@@ -92,7 +91,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
                     dLines[i].drawEdge(g2, radius);
                 }
                 for(int i = 0; i < vertexCount; i++){
-                    dVertexes[i].draw(g2, radius, new Color(0xFFEA2D));
+                    dVertexes[i].draw(g2, radius);
                 }
             }
         }
@@ -102,8 +101,24 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
         frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         frame.addMouseListener(this);
         frame.addMouseMotionListener(this);
+
     }
 
+    public void drawStep(int[] info){
+        for(int f = 0; f < vertexCount; f++){
+            if(f == info[0] ){dVertexes[f].setColor(new Color(0xFFB24D));}
+            else if(f == info[1]){dVertexes[f].setColor(new Color(0xFA8C69));}
+            else if(f == info[2]){dVertexes[f].setColor(new Color(0xC1FF4D));}
+            else dVertexes[f].setColor(new Color(0xFFFF1A));
+            refresh();
+        }
+    }
+
+    public void refresh(){
+        frame.update(g2);
+        frame.repaint();
+        frame.invalidate();
+        frame.revalidate();}
 
     public void setVisile(){
         frame.setVisible(true);
@@ -116,10 +131,12 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     private VertexDraw selected = null;
 
     public void mousePressed(MouseEvent e) {
+
+        selected = null;
         int x = e.getX();
         int y = e.getY();
         for (VertexDraw el : dVertexes) {
-            double coordinates = Math.pow((x - el.getX()), 2) + Math.pow((y - el.getY()), 2);
+            double coordinates = Math.pow((x - el.getX() - radius/2), 2) + Math.pow((y - el.getY()- radius/2), 2);
             if (coordinates <= Math.pow(radius, 2)) {
                 selected = el;
                 int newX, newY;
@@ -134,8 +151,8 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
 
     public void mouseClicked(MouseEvent e){}
     public void mouseReleased(MouseEvent e){
-        frame.setVisible(false);
-        frame.setVisible(true);
+        selected = null;
+        refresh();
     }
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}

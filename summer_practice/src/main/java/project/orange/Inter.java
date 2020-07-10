@@ -40,6 +40,7 @@ public class Inter extends JFrame {
 
     public Inter() {
         setUI();
+        setTitle("Алгоритм Флойда Уоршелла");
         n = new GraphController();
         inputWin = new Input();
         inputWin.setBounds(150, 100, 320, 330);
@@ -70,19 +71,7 @@ public class Inter extends JFrame {
             }
         });
 
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                onHelp();
-            }
-        });
 
-        aboutAlgorithmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                onAbout();
-            }
-        });
 
         runAlgorithmButton.addActionListener(new ActionListener() {
             @Override
@@ -211,6 +200,7 @@ public class Inter extends JFrame {
 
         setContentPane(contentPane);
         setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private void setButtons(JPanel buttonsPanel){
@@ -239,18 +229,18 @@ public class Inter extends JFrame {
         saveResultToFileButton.setText("Сохранить результат в файл");
         buttonsPanel.add(saveResultToFileButton);
 
-
-        helpButton = new JButton();
-        helpButton.setText("Помощь");
-        buttonsPanel.add(helpButton);
-
         drawGraphButton = new JButton();
         drawGraphButton.setText("Отрисовать граф");
         buttonsPanel.add(drawGraphButton);
 
-        aboutAlgorithmButton = new JButton();
-        aboutAlgorithmButton.setText("Об алгоритме");
-        buttonsPanel.add(aboutAlgorithmButton);
+        addEdge = new JButton();
+        addEdge.setText("Добавить ребро");
+        buttonsPanel.add(addEdge);
+
+        deleteEdge = new JButton();
+        deleteEdge.setText("Удалить ребро");
+        buttonsPanel.add(deleteEdge);
+
 
         addEdge = new JButton();
         addEdge.setText("Добавить ребро");
@@ -346,12 +336,6 @@ public class Inter extends JFrame {
 
     }
 
-    private void onHelp (){
-        JFrame frame = new JFrame();
-        frame.setVisible(true);
-        frame.setBounds(250,250, 300, 300);
-    }
-
     private void onRun (){
         resultMatrix.remove(endMatrix);
         if (!n.doAll()){
@@ -364,12 +348,6 @@ public class Inter extends JFrame {
         resultMatrix.add(endMatrix);
         this.revalidate();
 
-    }
-
-    private void onAbout (){
-        JFrame frame = new JFrame();
-        frame.setVisible(true);
-        frame.setBounds(250,250, 300, 300);
     }
 
     private void onConsole(){
@@ -400,6 +378,17 @@ public class Inter extends JFrame {
         }
         startMatrix.remove(graphMatrix);
         graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         startMatrix.add(graphMatrix);
         this.revalidate();
 
@@ -414,6 +403,17 @@ public class Inter extends JFrame {
         }
         startMatrix.remove(graphMatrix);
         graphMatrix = n.drawMatrix();
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         startMatrix.add(graphMatrix);
         this.revalidate();
     }
