@@ -168,6 +168,9 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
                         if (dLines[i].getStartVertex().getName().equals(el.getName())){
                             dLines[i].isVisible(true);
                         }
+                        else {
+                            dLines[i].isVisible(false);
+                        }
                     }
 
                     break;
