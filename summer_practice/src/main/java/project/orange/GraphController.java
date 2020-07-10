@@ -77,6 +77,8 @@ public class GraphController {
             //сообщение об ошибке?
             return null;
         }
+        int[] e = graph.getIJK();
+        drawer.drawStep(e);
         String res = graph.FloydWarshallStep();
         getCurrentState();
         return res;
@@ -124,6 +126,8 @@ public class GraphController {
     public boolean drawGraph() {
         if (graph == null)
             return false;
+        int[] e = graph.getIJK();
+        drawer.drawStep(e);
         drawer.setVisile();
         return true;
     }
@@ -162,6 +166,63 @@ public class GraphController {
 
     public void weightChange(int i, int j, int weight) {
         graph.changeEdgeWeight(i, j, weight);
+        if(drawer != null) drawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix());
+    }
+
+    public boolean addEdge(String string){
+
+        if (graph == null){
+            return consoleReader(string);
+        }
+
+        if (!syntaxAnalyzer(string)){
+            return false;
+        }
+
+        boolean exist = false;
+        for (Vertex v: graph.vertices){
+            if (v.getName() == string.charAt(0) || v.getName() == string.charAt(2)){
+                exist = true;
+            }
+        }
+        if (!exist){
+            return false;
+        }
+
+        graph.addEdge(string);
+        if(drawer != null) drawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix());
+
+        return true;
+    }
+
+    public boolean deleteEdge(String string){
+
+        if (graph == null){
+            return false;
+        }
+
+        string += " 1";
+        if (!syntaxAnalyzer(string)){
+            return false;
+        }
+        string = string.substring(0, 3);
+        int count = 0;
+        for (Vertex v: graph.vertices){
+            if (v.getName() == string.charAt(0))
+                count++;
+            else if (v.getName() == string.charAt(2))
+                count++;
+        }
+
+        if (count != 2)
+            return false;
+
+        graph.deleteEdge(string);
+        if(drawer != null) drawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix());
+        return true;
     }
 
 }
