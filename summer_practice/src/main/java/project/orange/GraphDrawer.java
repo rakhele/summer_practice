@@ -70,8 +70,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
 
             dVertexes[i].setCoords(curx, cury);
 
-            System.out.println("Vertex "+ i + " at (" + dVertexes[i].getX() + "," + dVertexes[i].getY() + ")");
-        }
+            }
 
 
     }
@@ -143,7 +142,6 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
                 newX = (x > el.getX() ? x - el.getX() : el.getX() - x);
                 newY = (y > el.getY() ? y - el.getY() : el.getY() - y);
                 offSet = new Point2D.Double(newX, newY);
-                //offSet = new Point2D.Double(x - el.getX(), y - el.getY());
                 break;
             }
         }
@@ -165,6 +163,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
             selected.setCoords((int)x, (int)y);
 
         }
+        refresh();
     }
     public void mouseMoved(MouseEvent e){}
 }

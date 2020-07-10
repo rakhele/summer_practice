@@ -27,10 +27,11 @@ public class Inter extends JFrame {
     private JButton drawGraphButton;
     private JButton runAlgorithmButton;
     private JButton saveResultToFileButton;
-    private JButton aboutAlgorithmButton;
     private JButton helpButton;
     private JButton addEdge;
     private JButton deleteEdge;
+    private JButton initialGraphButton;
+    private JButton resetAlgorithmButton;
     private GraphController n;
     private JPanel startMatrix;
     private JPanel resultMatrix;
@@ -119,6 +120,27 @@ public class Inter extends JFrame {
             }
         });
 
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onHelp();
+            }
+        });
+
+        initialGraphButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onInitialGraph();
+            }
+        });
+
+        resetAlgorithmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                onResetAlgorithm();
+            }
+        });
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
@@ -187,7 +209,7 @@ public class Inter extends JFrame {
 
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(3, 3, 5, 0));
+        buttonsPanel.setLayout(new GridLayout(4, 3, 5, 0));
         setButtons(buttonsPanel);
 
         constraints.ipady = 0;
@@ -240,6 +262,18 @@ public class Inter extends JFrame {
         deleteEdge = new JButton();
         deleteEdge.setText("Удалить ребро");
         buttonsPanel.add(deleteEdge);
+
+        helpButton = new JButton();
+        helpButton.setText("Помощь");
+        buttonsPanel.add(helpButton);
+
+        initialGraphButton = new JButton();
+        initialGraphButton.setText("Показать исходный граф");
+        buttonsPanel.add(initialGraphButton);
+
+        resetAlgorithmButton = new JButton();
+        resetAlgorithmButton.setText("Сбросить выполнение алгоритма");
+        buttonsPanel.add(resetAlgorithmButton);
 
 
     }
@@ -407,6 +441,23 @@ public class Inter extends JFrame {
         });
         startMatrix.add(graphMatrix);
         this.revalidate();
+    }
+
+    private void onHelp(){
+        JFrame frame = new JFrame();
+        frame.setVisible(true);
+        frame.setBounds(250,250, 300, 300);
+    }
+
+    private void onInitialGraph(){
+        if (!n.drawInitialGraph()){
+            JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    }
+
+    private void onResetAlgorithm(){
+        n.reset();
     }
 
 }
