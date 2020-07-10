@@ -45,7 +45,9 @@ public class Input extends JDialog {
         setContentPane(contentPane);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-        JTextArea lgraph = new JTextArea("Правила ввода графа:\nПетли запрещены, граф предполагается связным\nНа вход подаются ребра вида:\n  вершина1 вершина2 вес ребра\nВершины именуются !одним! символом");
+        JTextArea lgraph = new JTextArea("Правила ввода графа:\nПетли запрещены, граф предполагается связным\n" +
+                "На вход подаются ребра вида:\n  вершина1 вершина2 вес ребра\n" +
+                "Вершины именуются !одним! символом\nДля завершения ввода закройте окно");
         lgraph.setLineWrap(true);
         lgraph.setEditable(false);
         //lgraph.setForeground(new Color(0x030311));
