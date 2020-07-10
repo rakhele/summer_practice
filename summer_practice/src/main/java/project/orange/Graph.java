@@ -151,8 +151,29 @@ public class Graph {
         return paths;
     }
 
+    public int[][] getEdges() {
+        if (matrix.length == 0) {
+            return null;
+        }
+        int[][] edges = new int[matrix.length][];
+        for (int n = 0; n < matrix.length; n++) {
+            edges[n] = new int[matrix.length];
+            for (int m = 0; m < matrix[n].length; m++) {
+                if (m == n) {
+                    edges[n][m] = 0;
+                } else if (matrix[n][m] == null) {
+                    edges[n][m] = -1;
+                } else {
+                    edges[n][m] = matrix[n][m].getWeight();
+                }
+            }
+        }
+        return edges;
+    }
+
     public void changeEdgeWeight(int i, int j, int newWeight) {
         if (i != j) {
+            currI = currJ = currK = 0;
             matrix[i][j].changeWeight(newWeight);
             matrix[i][j].changePath(newWeight, "" + vertices.get(i).getName() + vertices.get(j).getName());
         }
@@ -188,6 +209,7 @@ public class Graph {
             matrix = tmp;
             verNum = vertices.size();
         }
+        currI = currJ = currK = 0;
         matrix[ind1][ind2] = new Connection(Integer.valueOf(edge.substring(4)), "" + edge.charAt(0) + edge.charAt(2));
         return true;
     }
@@ -205,6 +227,7 @@ public class Graph {
         }
         int ind2 = vertices.indexOf(ver);
 
+        currI = currJ = currK = 0;
         matrix[ind1][ind2] = new Connection(-1, "");
         return true;
     }
