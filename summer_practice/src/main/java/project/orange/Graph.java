@@ -88,17 +88,17 @@ public class Graph {
             return res;
         }
         if (matrix[currI][currK].getPathLength() < 0 || matrix[currK][currJ].getPathLength() < 0) {
-            res = "Нельзя построить новый путь из вершины " + vertices.get(currI).getName() + " в вершину " + vertices.get(currJ).getName() + "\n через вершину " + vertices.get(currK).getName();
+            res = "Нельзя построить новый путь из вершины " + vertices.get(currI).getName() + " в вершину " + vertices.get(currJ).getName() + "\nчерез вершину " + vertices.get(currK).getName();
         } else if (matrix[currI][currJ].getPathLength() < 0 ||  matrix[currI][currJ].getPathLength() >
                 (matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength())) {
             res = "Путь из вершины " + vertices.get(currI).getName() + " в вершину "
-                    + vertices.get(currJ).getName() + " был изменен.\n Старый путь: " + matrix[currI][currJ].getPath() + "; \n";
+                    + vertices.get(currJ).getName() + " был изменен.\nСтарый путь: " + matrix[currI][currJ].getPath() + "; \n";
             matrix[currI][currJ].changePath(matrix[currI][currK].getPathLength() + matrix[currK][currJ].getPathLength(),
                     matrix[currI][currK].getPath() + matrix[currK][currJ].getPath().substring(1));
-            res = res + "  Hовый путь: " + matrix[currI][currJ].getPath() + "; длина нового пути: "
+            res = res + "Hовый путь: " + matrix[currI][currJ].getPath() + "; длина нового пути: "
                     + matrix[currI][currJ].getPathLength();
         } else {
-            res = "Путь не был изменен.\n  Путь из вершины " + vertices.get(currI).getName() + " в вершину " + vertices.get(currJ).getName() + ": " + matrix[currI][currJ].getPath() + "; длина пути: " + matrix[currI][currJ].getPathLength();
+            res = "Путь не был изменен.\nПуть из вершины " + vertices.get(currI).getName() + " в вершину " + vertices.get(currJ).getName() + ": " + matrix[currI][currJ].getPath() + "; длина пути: " + matrix[currI][currJ].getPathLength();
         }
 
         if (currJ < (verNum - 1)) {
