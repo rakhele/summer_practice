@@ -21,6 +21,7 @@ public class GraphController {
             return false;
         }
         if(drawer != null) drawer.setNonVisile();
+        if(startDrawer != null) startDrawer.setNonVisile();
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
         startDrawer = new GraphDrawer(getVertex(), getEdges());
@@ -31,6 +32,7 @@ public class GraphController {
     public boolean randomGraph(String input) {
         if (input == null) { return false; }
         if(drawer != null) drawer.setNonVisile();
+        if(startDrawer != null) startDrawer.setNonVisile();
         int verNum = Integer.valueOf(input);
         graph = GraphGenerator.generateRandom(verNum);
         if (graph == null){
@@ -79,7 +81,6 @@ public class GraphController {
 
     public String doStep() {
         if (graph == null) {
-            //сообщение об ошибке?
             return null;
         }
         int[] e = graph.getIJK();
@@ -135,6 +136,8 @@ public class GraphController {
         if (graph == null)
             return false;
         int[] e = graph.getIJK();
+        if(drawer != null) drawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix());
         drawer.drawStep(e);
         drawer.setVisile();
         return true;
@@ -143,7 +146,8 @@ public class GraphController {
     public boolean drawInitialGraph() {
         if (graph == null)
             return false;
-        int[] e = graph.getIJK();
+        int[] e = {graph.getVertices().length(), graph.getVertices().length(), graph.getVertices().length()};
+        if(startDrawer != null) startDrawer.setNonVisile();
         startDrawer.drawStep(e);
         startDrawer.setVisile();
         return true;
@@ -162,7 +166,6 @@ public class GraphController {
             else f[i] = in.charAt(i - 1);
         }
 
-
         for(int i  = 0; i < in.length() + 1; i++){
             for(int j  = 0; j < in.length() + 1; j++){
                 if(i == 0 && j == 0) m[0][0] = ' ';
@@ -172,7 +175,6 @@ public class GraphController {
                 if(m[i][j] == e) m[i][j] = infinitySymbol;
             }
         }
-
 
         JTable graphMatrix = new JTable(m, f);
         for(int i  = 0; i < in.length() + 1; i++){
@@ -221,6 +223,7 @@ public class GraphController {
 
         graph.addEdge(string);
         if(drawer != null) drawer.setNonVisile();
+        if(startDrawer != null) startDrawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
         startDrawer = new GraphDrawer(getVertex(), getEdges());
 
@@ -251,6 +254,7 @@ public class GraphController {
 
         graph.deleteEdge(string);
         if(drawer != null) drawer.setNonVisile();
+        if(startDrawer != null) startDrawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
         startDrawer = new GraphDrawer(getVertex(), getEdges());
         return true;
@@ -262,6 +266,7 @@ public class GraphController {
         }
         graph.reset();
         if(drawer != null) drawer.setNonVisile();
+        if(startDrawer != null) startDrawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
         startDrawer = new GraphDrawer(getVertex(), getEdges());
         return true;
