@@ -294,28 +294,37 @@ public class Inter extends JFrame {
                 JOptionPane.showMessageDialog(Inter.this, "Неверная запись графа", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
+            startMatrix.remove(graphMatrix);
+            resultMatrix.remove(endMatrix);
+            startMatrix.updateUI();
+            resultMatrix.updateUI();
 
             graphMatrix = n.drawMatrix();
             startMatrix.add(graphMatrix);
 
-            lgraph.setText(input);
+            lgraph.setText("Граф введен из файла " + file + ":\n");
+            lgraph.append(input);
             graph.add(lgraph);
         }
     }
 
     private void onRandom() {
-        startMatrix.remove(graphMatrix);
-
-        input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерафия случайного графа", JOptionPane.PLAIN_MESSAGE);
+        input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерация случайного графа", JOptionPane.PLAIN_MESSAGE);
+        if (input == null) return;
         if (!n.randomGraph(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное количество вершин", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        startMatrix.remove(graphMatrix);
+        resultMatrix.remove(endMatrix);
+        startMatrix.updateUI();
+        resultMatrix.updateUI();
 
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
 
-        lgraph.setText(n.getCurrentState());
+        lgraph.setText("Случайная генерация графа с " + input + " вершинами:\n");
+        lgraph.append(n.getCurrentState());
         graph.add(lgraph);
     }
 
@@ -361,22 +370,22 @@ public class Inter extends JFrame {
     }
 
     private void onRun (){
-        resultMatrix.remove(endMatrix);
         if (!n.doAll()){
             JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        resultMatrix.remove(endMatrix);
         endMatrix = n.drawMatrix();
         endMatrix.setEnabled(false);
         resultMatrix.add(endMatrix);
+        lgraph.setText("Алгоритм завершен.\nТекущее состояние графа:\n");
+        lgraph.append(n.getCurrentState());
+        graph.add(lgraph);
         this.revalidate();
 
     }
 
     private void onConsole(){
-        startMatrix.remove(graphMatrix);
-
         inputWin.setVisible(true);
         input = inputWin.getInputText();
 
@@ -384,61 +393,51 @@ public class Inter extends JFrame {
             JOptionPane.showMessageDialog(Inter.this, "Неверная запись графа", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        startMatrix.remove(graphMatrix);
+        resultMatrix.remove(endMatrix);
+        startMatrix.updateUI();
+        resultMatrix.updateUI();
 
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
 
-        lgraph.setText(input);
+        lgraph.setText("Граф введен с клавиатуры:\n");
+        lgraph.append(input);
         graph.add(lgraph);
     }
 
     private void onAddEdge(){
-
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите новое ребро: "}, "Создание нового ребра", JOptionPane.PLAIN_MESSAGE);
-
+        if (input == null) return;
         if (!n.addEdge(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
         startMatrix.remove(graphMatrix);
+        resultMatrix.remove(endMatrix);
+        resultMatrix.updateUI();
         graphMatrix = n.drawMatrix();
-        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (row == 0 || column == 0 || row == column) { return; }
-                TableModel model = (TableModel)e.getSource();
-                Object data = model.getValueAt(row, column);
-                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
-            }
-        });
         startMatrix.add(graphMatrix);
+        lgraph.setText("Добавлено ребро \"" + input + "\".\nПерезапустите алгоритм.");
+        graph.add(lgraph);
         this.revalidate();
 
     }
 
     private void onDeleteEdge(){
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите ребро для удаления: "}, "Удаление ребра", JOptionPane.PLAIN_MESSAGE);
-
+        if (input == null) return;
         if (!n.deleteEdge(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
         startMatrix.remove(graphMatrix);
+        resultMatrix.remove(endMatrix);
+        resultMatrix.updateUI();
         graphMatrix = n.drawMatrix();
-        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (row == 0 || column == 0 || row == column) { return; }
-                TableModel model = (TableModel)e.getSource();
-                Object data = model.getValueAt(row, column);
-                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
-            }
-        });
         startMatrix.add(graphMatrix);
+        lgraph.setText("Удалено ребро \"" + input + "\".\nПерезапустите алгоритм.");
+        graph.add(lgraph);
         this.revalidate();
     }
 
@@ -457,7 +456,12 @@ public class Inter extends JFrame {
     private void onResetAlgorithm(){
         if (!n.reset()){
             JOptionPane.showMessageDialog(Inter.this, "Пустой граф", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        resultMatrix.remove(endMatrix);
+        resultMatrix.updateUI();
+        lgraph.setText("Результат работы алгоритма сброшен.\nТекущее состояние графа:\n");
+        lgraph.append(n.getCurrentState());
+        graph.add(lgraph);
     }
-
 }
