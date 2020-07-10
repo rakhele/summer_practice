@@ -23,8 +23,8 @@ public class GraphController {
         if(drawer != null) drawer.setNonVisile();
         if(startDrawer != null) startDrawer.setNonVisile();
         graph = new Graph(input);
-        drawer = new GraphDrawer(getVertex(), getMatrix());
-        startDrawer = new GraphDrawer(getVertex(), getEdges());
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
+        startDrawer = new GraphDrawer(getVertex(), getEdges(), "Исходный граф");
 
         return true;
     }
@@ -39,8 +39,8 @@ public class GraphController {
             if (graph == null){
                 return false;
             }
-            drawer = new GraphDrawer(getVertex(), getMatrix());
-            startDrawer = new GraphDrawer(getVertex(), getEdges());
+            drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
+            startDrawer = new GraphDrawer(getVertex(), getEdges(), "Исходный граф");
             return true;
         } catch (NumberFormatException e) {
             return false;
@@ -80,6 +80,8 @@ public class GraphController {
             return false;
         }
         graph.FloydWarshall();
+        if(drawer != null) drawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
         return true;
     }
 
@@ -141,7 +143,7 @@ public class GraphController {
             return false;
         int[] e = graph.getIJK();
         if(drawer != null) drawer.setNonVisile();
-        drawer = new GraphDrawer(getVertex(), getMatrix());
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
         drawer.drawStep(e);
         drawer.setVisile();
         return true;
@@ -201,8 +203,9 @@ public class GraphController {
     public void weightChange(int i, int j, int weight) {
         graph.changeEdgeWeight(i, j, weight);
         if(drawer != null) drawer.setNonVisile();
-        drawer = new GraphDrawer(getVertex(), getMatrix());
-        startDrawer = new GraphDrawer(getVertex(), getEdges());
+        if(startDrawer != null) startDrawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
+        startDrawer = new GraphDrawer(getVertex(), getEdges(), "Исходный граф");
     }
 
     public boolean addEdge(String string){
@@ -228,8 +231,8 @@ public class GraphController {
         graph.addEdge(string);
         if(drawer != null) drawer.setNonVisile();
         if(startDrawer != null) startDrawer.setNonVisile();
-        drawer = new GraphDrawer(getVertex(), getMatrix());
-        startDrawer = new GraphDrawer(getVertex(), getEdges());
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
+        startDrawer = new GraphDrawer(getVertex(), getEdges(), "Исходный граф");
 
         return true;
     }
@@ -259,8 +262,8 @@ public class GraphController {
         graph.deleteEdge(string);
         if(drawer != null) drawer.setNonVisile();
         if(startDrawer != null) startDrawer.setNonVisile();
-        drawer = new GraphDrawer(getVertex(), getMatrix());
-        startDrawer = new GraphDrawer(getVertex(), getEdges());
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
+        startDrawer = new GraphDrawer(getVertex(), getEdges(), "Исходный граф");
         return true;
     }
 
@@ -271,8 +274,8 @@ public class GraphController {
         graph.reset();
         if(drawer != null) drawer.setNonVisile();
         if(startDrawer != null) startDrawer.setNonVisile();
-        drawer = new GraphDrawer(getVertex(), getMatrix());
-        startDrawer = new GraphDrawer(getVertex(), getEdges());
+        drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
+        startDrawer = new GraphDrawer(getVertex(), getEdges(), "Исходный граф");
         return true;
     }
 
