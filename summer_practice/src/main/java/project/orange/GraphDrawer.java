@@ -45,7 +45,6 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
             }
         }
 
-
         makeFrame(title);
     }
 
@@ -69,9 +68,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
 
             dVertexes[i].setCoords(curx, cury);
 
-            }
-
-
+        }
     }
 
     private void makeFrame(String title){
@@ -102,13 +99,24 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
 
     }
 
-    public void drawStep(int[] info){
+    private boolean isEndTemp;
+
+    public void drawStep(int[] info, boolean isEnd){
+        isEndTemp = isEnd;
+
         for(int f = 0; f < vertexCount; f++){
             if(f == info[0] ){dVertexes[f].setColor(new Color(0xFFB24D));}
             else if(f == info[1]){dVertexes[f].setColor(new Color(0xFA8C69));}
             else if(f == info[2]){dVertexes[f].setColor(new Color(0xC1FF4D));}
             else dVertexes[f].setColor(new Color(0xFFFF1A));
             refresh();
+        }
+
+        if (isEnd){
+            for (int i = 0; i < edgesCount; i++){
+                dLines[i].isVisible(false);
+
+            }
         }
     }
 
@@ -146,7 +154,29 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
         }
     }
 
-    public void mouseClicked(MouseEvent e){}
+    public void mouseClicked(MouseEvent e){
+        if (isEndTemp){
+            int x = e.getX();
+            int y = e.getY();
+
+
+            for (VertexDraw el : dVertexes) {
+                double coordinates = Math.pow((x - el.getX() - radius/2), 2) + Math.pow((y - el.getY()- radius/2), 2);
+                if (coordinates <= Math.pow(radius, 2)) {
+
+                    for (int i = 0; i < edgesCount; i++){
+                        if (dLines[i].getStartVertex().getName().equals(el.getName())){
+                            dLines[i].isVisible(true);
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+
+        }
+    }
 
     public void mouseReleased(MouseEvent e){
         selected = null;

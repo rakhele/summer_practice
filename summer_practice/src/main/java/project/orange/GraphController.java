@@ -90,7 +90,13 @@ public class GraphController {
             return null;
         }
         int[] e = graph.getIJK();
-        drawer.drawStep(e);
+
+        boolean isEnd = false;
+        if ((e[0] >= graph.vertices.size()-1) && (e[1] >= graph.vertices.size()-1) && (e[2] >= graph.vertices.size()-1)){
+            isEnd = true;
+        }
+
+        drawer.drawStep(e, isEnd);
         String res = graph.FloydWarshallStep();
         return res;
     }
@@ -142,9 +148,13 @@ public class GraphController {
         if (graph == null)
             return false;
         int[] e = graph.getIJK();
+        boolean isEnd = false;
+        if ((e[0] >= graph.vertices.size()-1) && (e[1] >= graph.vertices.size()-1) && (e[2] >= graph.vertices.size()-1)){
+            isEnd = true;
+        }
         if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix(), "Обрабатываемый граф");
-        drawer.drawStep(e);
+        drawer.drawStep(e, isEnd);
         drawer.setVisile();
         return true;
     }
@@ -154,7 +164,7 @@ public class GraphController {
             return false;
         int[] e = {graph.getVertices().length(), graph.getVertices().length(), graph.getVertices().length()};
         if(startDrawer != null) startDrawer.setNonVisile();
-        startDrawer.drawStep(e);
+        startDrawer.drawStep(e, false);
         startDrawer.setVisile();
         return true;
     }

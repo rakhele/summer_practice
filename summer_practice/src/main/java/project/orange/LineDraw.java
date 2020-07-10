@@ -8,6 +8,8 @@ public class LineDraw {
     private VertexDraw start;
     private VertexDraw end;
     private int modificate;
+    private Color color;
+    private boolean isVisible;
 
     private int length;
 
@@ -16,6 +18,8 @@ public class LineDraw {
         start = first;
         end = second;
         modificate = 0;
+        color = Color.BLACK;
+        isVisible = true;
     }
 
     public void setPareModificate(int i){modificate = i;}
@@ -66,24 +70,34 @@ public class LineDraw {
         xn = x;
 
 
-        g.setColor(Color.BLACK);
-        g.drawLine(getFromX(), getFromY(),getToX(),getToY());
-        d = getFromPort(radius);
-        g.drawLine((int) xm, (int) ym, d.x, d.y);
-        g.drawLine((int) xn, (int) yn, d.x, d.y);
-        g.drawLine((int) xm, (int) ym,(int) xn, (int) yn);
+        if (isVisible){
+            g.setColor(color);
+            g.drawLine(getFromX(), getFromY(),getToX(),getToY());
+            d = getFromPort(radius);
+            g.drawLine((int) xm, (int) ym, d.x, d.y);
+            g.drawLine((int) xn, (int) yn, d.x, d.y);
+            g.drawLine((int) xm, (int) ym,(int) xn, (int) yn);
 
 
-        int xc = (getFromX() + getToX())/2;
-        int yc = (getFromY() + getToY())/2;
-        g.setColor(new Color(0xFFF2FF));
-        g.fill(new Ellipse2D.Float(xc - 9, yc - 9, 18, 18));
-        g.setColor(Color.BLACK);
-        g.drawString((String.valueOf(getLength())), xc -5, yc +5);
+            int xc = (getFromX() + getToX())/2;
+            int yc = (getFromY() + getToY())/2;
+            g.setColor(new Color(0xFFF2FF));
+            g.fill(new Ellipse2D.Float(xc - 9, yc - 9, 18, 18));
+            g.setColor(Color.BLACK);
+            g.drawString((String.valueOf(getLength())), xc -5, yc +5);
+        }
 
         //exhange();
 
 
+    }
+
+    public void changeColor(Color color){
+        this.color = color;
+    }
+
+    public void isVisible(boolean ch){
+        isVisible = ch;
     }
 
     private Point getToPort(int radius) {
@@ -140,5 +154,9 @@ public class LineDraw {
             angle -= 180;
         }
         return angle;
+    }
+
+    public VertexDraw getStartVertex(){
+        return end; // да, так нужно
     }
 }
