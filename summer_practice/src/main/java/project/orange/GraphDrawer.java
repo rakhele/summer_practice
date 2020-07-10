@@ -22,7 +22,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     Point2D offSet;
 
 
-    public GraphDrawer(String vertexes, int[][] sizes){
+    public GraphDrawer(String vertexes, int[][] sizes, String title){
         vertexCount = vertexes.length();
         dVertexes = new VertexDraw[vertexCount];
         dLines = new LineDraw[vertexCount*vertexCount];
@@ -46,8 +46,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
         }
 
 
-        makeFrame();
-
+        makeFrame(title);
     }
 
     private void setVertexCoords(){
@@ -75,9 +74,9 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
 
     }
 
-    private void makeFrame(){
+    private void makeFrame(String title){
         frame = new JFrame();
-        frame.setTitle("Заданный граф (можно двигать вершины)");
+        frame.setTitle(title);
         frame.setBounds(200,180, 500, 450);
 
         class GComp extends JComponent {
@@ -131,7 +130,6 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     private VertexDraw selected = null;
 
     public void mousePressed(MouseEvent e) {
-
         selected = null;
         int x = e.getX();
         int y = e.getY();
@@ -149,6 +147,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     }
 
     public void mouseClicked(MouseEvent e){}
+
     public void mouseReleased(MouseEvent e){
         selected = null;
         refresh();
