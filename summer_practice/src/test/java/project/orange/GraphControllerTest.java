@@ -25,11 +25,11 @@ public class GraphControllerTest {
 
     @Test
     public void testSyntaxAnalizer(){
-        assertTrue(controller.syntaxAnalizer("a v 4\nf q 3"));
-        assertTrue(controller.syntaxAnalizer("r t 1"));
-        assertFalse(controller.syntaxAnalizer(""));
-        assertFalse(controller.syntaxAnalizer("ar f 4\na b 2"));
-        assertFalse(controller.syntaxAnalizer("a d 4 a s 4"));
+        assertTrue(controller.syntaxAnalyzer("a v 4\nf q 3"));
+        assertTrue(controller.syntaxAnalyzer("r t 1"));
+        assertFalse(controller.syntaxAnalyzer(""));
+        assertFalse(controller.syntaxAnalyzer("ar f 4\na b 2"));
+        assertFalse(controller.syntaxAnalyzer("a d 4 a s 4"));
     }
 
     @Test
@@ -38,13 +38,13 @@ public class GraphControllerTest {
         for (int i = 0; i < (GraphController.maxVertices); i = i+2){
             string += (char)('a'+i) + " " + (char)('b'+i) + " 1\n";
         }
-        assertTrue(controller.syntaxAnalizer(string));
-        assertTrue(controller.syntaxAnalizer("r t 4"));
-        assertFalse(controller.syntaxAnalizer("av c 4\nf q 3\nw e 3\nz x 0\np v 5"));
-        assertFalse(controller.syntaxAnalizer("a v 4\nf q 3\nw e 3\nz x 0\np v 5"));
-        assertTrue(controller.syntaxAnalizer("a v 4\nf q " + Integer.toString(GraphController.maxWeight)));
-        assertFalse(controller.syntaxAnalizer("a v 4\nf q " + Integer.toString(GraphController.maxWeight+1)));
-        assertFalse(controller.syntaxAnalizer("a d 4 a s 4"));
+        assertTrue(controller.syntaxAnalyzer(string));
+        assertTrue(controller.syntaxAnalyzer("r t 4"));
+        assertFalse(controller.syntaxAnalyzer("av c 4\nf q 3\nw e 3\nz x 0\np v 5"));
+        assertFalse(controller.syntaxAnalyzer("a v 4\nf q 3\nw e 3\nz x 0\np v 5"));
+        assertTrue(controller.syntaxAnalyzer("a v 4\nf q " + Integer.toString(GraphController.maxWeight)));
+        assertFalse(controller.syntaxAnalyzer("a v 4\nf q " + Integer.toString(GraphController.maxWeight+1)));
+        assertFalse(controller.syntaxAnalyzer("a d 4 a s 4"));
     }
 
 }

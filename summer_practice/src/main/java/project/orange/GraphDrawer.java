@@ -101,6 +101,7 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
         frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         frame.addMouseListener(this);
         frame.addMouseMotionListener(this);
+
     }
 
     public void drawStep(int[] info){
@@ -111,7 +112,6 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
             else dVertexes[f].setColor(new Color(0xFFFF1A));
             refresh();
         }
-
     }
 
     public void refresh(){
@@ -131,12 +131,12 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     private VertexDraw selected = null;
 
     public void mousePressed(MouseEvent e) {
+
         selected = null;
         int x = e.getX();
         int y = e.getY();
         for (VertexDraw el : dVertexes) {
             double coordinates = Math.pow((x - el.getX() - radius/2), 2) + Math.pow((y - el.getY()- radius/2), 2);
-
             if (coordinates <= Math.pow(radius, 2)) {
                 selected = el;
                 int newX, newY;
@@ -153,7 +153,6 @@ public class GraphDrawer implements MouseListener, MouseMotionListener {
     public void mouseReleased(MouseEvent e){
         selected = null;
         refresh();
-
     }
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}

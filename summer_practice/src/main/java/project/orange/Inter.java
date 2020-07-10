@@ -187,7 +187,7 @@ public class Inter extends JFrame {
 
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(3, 3, 5, 0));
+        buttonsPanel.setLayout(new GridLayout(4, 3, 5, 0));
         setButtons(buttonsPanel);
 
         constraints.ipady = 0;
@@ -242,6 +242,15 @@ public class Inter extends JFrame {
         buttonsPanel.add(deleteEdge);
 
 
+        addEdge = new JButton();
+        addEdge.setText("Добавить ребро");
+        buttonsPanel.add(addEdge);
+
+        deleteEdge = new JButton();
+        deleteEdge.setText("Удалить ребро");
+        buttonsPanel.add(deleteEdge);
+
+
     }
 
     private void onFromFile() throws IOException {
@@ -262,17 +271,6 @@ public class Inter extends JFrame {
             }
 
             graphMatrix = n.drawMatrix();
-            graphMatrix.getModel().addTableModelListener(new TableModelListener() {
-                @Override
-                public void tableChanged(TableModelEvent e) {
-                    int row = e.getFirstRow();
-                    int column = e.getColumn();
-                    if (row == 0 || column == 0 || row == column) { return; }
-                    TableModel model = (TableModel)e.getSource();
-                    Object data = model.getValueAt(row, column);
-                    n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
-                }
-            });
             startMatrix.add(graphMatrix);
 
             lgraph.setText(input);
@@ -291,17 +289,6 @@ public class Inter extends JFrame {
         }
 
         graphMatrix = n.drawMatrix();
-        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (row == 0 || column == 0 || row == column) { return; }
-                TableModel model = (TableModel)e.getSource();
-                Object data = model.getValueAt(row, column);
-                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
-            }
-        });
         startMatrix.add(graphMatrix);
 
         lgraph.setText(n.getCurrentState());
@@ -375,17 +362,6 @@ public class Inter extends JFrame {
         }
 
         graphMatrix = n.drawMatrix();
-        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                int row = e.getFirstRow();
-                int column = e.getColumn();
-                if (row == 0 || column == 0 || row == column) { return; }
-                TableModel model = (TableModel)e.getSource();
-                Object data = model.getValueAt(row, column);
-                n.weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
-            }
-        });
         startMatrix.add(graphMatrix);
 
         lgraph.setText(input);

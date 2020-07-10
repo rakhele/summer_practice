@@ -1,6 +1,8 @@
 package project.orange;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.io.FileWriter;
@@ -161,6 +163,17 @@ public class GraphController {
         for(int i  = 0; i < in.length() + 1; i++){
             graphMatrix.getColumnModel().getColumn(i).setPreferredWidth(30);
         }
+        graphMatrix.getModel().addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                if (row == 0 || column == 0 || row == column) { return; }
+                TableModel model = (TableModel)e.getSource();
+                Object data = model.getValueAt(row, column);
+                weightChange(row - 1, column - 1, Integer.valueOf(data.toString()));
+            }
+        });
         return graphMatrix;
     }
 
