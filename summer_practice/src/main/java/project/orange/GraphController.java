@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class GraphController {
     private Graph graph;
-    GraphDrawer drawer;
+    private GraphDrawer drawer;
+    private GraphDrawer startDrawer;
     static final int maxVertices = 10;
     static final int maxWeight = 100;
 
@@ -22,6 +23,7 @@ public class GraphController {
         if(drawer != null) drawer.setNonVisile();
         graph = new Graph(input);
         drawer = new GraphDrawer(getVertex(), getMatrix());
+        startDrawer = new GraphDrawer(getVertex(), getEdges());
 
         return true;
     }
@@ -35,6 +37,7 @@ public class GraphController {
             return false;
         }
         drawer = new GraphDrawer(getVertex(), getMatrix());
+        startDrawer = new GraphDrawer(getVertex(), getEdges());
         return true;
     }
 
@@ -82,7 +85,6 @@ public class GraphController {
         int[] e = graph.getIJK();
         drawer.drawStep(e);
         String res = graph.FloydWarshallStep();
-        getCurrentState();
         return res;
     }
 
@@ -112,6 +114,10 @@ public class GraphController {
         return ((graph == null) ? null : graph.getMatrix());
     }
 
+    public int[][] getEdges(){
+        return ((graph == null) ? null : graph.getEdges());
+    }
+
     public boolean saveRes(FileWriter writer) {
         if (graph == null) {
             return false;
@@ -131,6 +137,13 @@ public class GraphController {
         int[] e = graph.getIJK();
         drawer.drawStep(e);
         drawer.setVisile();
+        return true;
+    }
+
+    public boolean drawInitialGraph() {
+        if (graph == null)
+            return false;
+        startDrawer.setVisile();
         return true;
     }
 
@@ -181,6 +194,7 @@ public class GraphController {
         graph.changeEdgeWeight(i, j, weight);
         if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
+        startDrawer = new GraphDrawer(getVertex(), getEdges());
     }
 
     public boolean addEdge(String string){
@@ -206,6 +220,7 @@ public class GraphController {
         graph.addEdge(string);
         if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
+        startDrawer = new GraphDrawer(getVertex(), getEdges());
 
         return true;
     }
@@ -235,7 +250,15 @@ public class GraphController {
         graph.deleteEdge(string);
         if(drawer != null) drawer.setNonVisile();
         drawer = new GraphDrawer(getVertex(), getMatrix());
+        startDrawer = new GraphDrawer(getVertex(), getEdges());
         return true;
+    }
+
+    public void reset() {
+        graph.reset();
+        if(drawer != null) drawer.setNonVisile();
+        drawer = new GraphDrawer(getVertex(), getMatrix());
+        startDrawer = new GraphDrawer(getVertex(), getEdges());
     }
 
 }
