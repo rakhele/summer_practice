@@ -187,7 +187,7 @@ public class Inter extends JFrame {
 
 
         JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new GridLayout(4, 3, 5, 0));
+        buttonsPanel.setLayout(new GridLayout(3, 3, 5, 0));
         setButtons(buttonsPanel);
 
         constraints.ipady = 0;
@@ -232,15 +232,6 @@ public class Inter extends JFrame {
         drawGraphButton = new JButton();
         drawGraphButton.setText("Отрисовать граф");
         buttonsPanel.add(drawGraphButton);
-
-        addEdge = new JButton();
-        addEdge.setText("Добавить ребро");
-        buttonsPanel.add(addEdge);
-
-        deleteEdge = new JButton();
-        deleteEdge.setText("Удалить ребро");
-        buttonsPanel.add(deleteEdge);
-
 
         addEdge = new JButton();
         addEdge.setText("Добавить ребро");
