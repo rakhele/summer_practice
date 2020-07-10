@@ -310,6 +310,7 @@ public class Inter extends JFrame {
 
     private void onRandom() {
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите количество вершин случайного графа: "}, "Генерация случайного графа", JOptionPane.PLAIN_MESSAGE);
+        if (input == null) return;
         if (!n.randomGraph(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное количество вершин", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
@@ -407,7 +408,7 @@ public class Inter extends JFrame {
 
     private void onAddEdge(){
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите новое ребро: "}, "Создание нового ребра", JOptionPane.PLAIN_MESSAGE);
-
+        if (input == null) return;
         if (!n.addEdge(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
@@ -425,6 +426,7 @@ public class Inter extends JFrame {
 
     private void onDeleteEdge(){
         input = JOptionPane.showInputDialog(this, new String[] {"", "Введите ребро для удаления: "}, "Удаление ребра", JOptionPane.PLAIN_MESSAGE);
+        if (input == null) return;
         if (!n.deleteEdge(input)){
             JOptionPane.showMessageDialog(Inter.this, "Неверное ребро", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;

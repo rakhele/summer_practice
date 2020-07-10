@@ -33,14 +33,18 @@ public class GraphController {
         if (input == null) { return false; }
         if(drawer != null) drawer.setNonVisile();
         if(startDrawer != null) startDrawer.setNonVisile();
-        int verNum = Integer.valueOf(input);
-        graph = GraphGenerator.generateRandom(verNum);
-        if (graph == null){
+        try {
+            int verNum = Integer.valueOf(input);
+            graph = GraphGenerator.generateRandom(verNum);
+            if (graph == null){
+                return false;
+            }
+            drawer = new GraphDrawer(getVertex(), getMatrix());
+            startDrawer = new GraphDrawer(getVertex(), getEdges());
+            return true;
+        } catch (NumberFormatException e) {
             return false;
         }
-        drawer = new GraphDrawer(getVertex(), getMatrix());
-        startDrawer = new GraphDrawer(getVertex(), getEdges());
-        return true;
     }
 
     protected boolean syntaxAnalyzer(String input) {
