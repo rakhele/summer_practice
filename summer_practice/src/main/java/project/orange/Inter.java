@@ -182,7 +182,10 @@ public class Inter extends JFrame {
         lgraph.setBackground(new Color(0xFFFFFF));
         lgraph.setFont(new Font("TimesRoman", 0, 15));
         lgraph.setMinimumSize(new Dimension(100, 100));
-        graph.add(lgraph);
+        JScrollPane scrP = new JScrollPane();
+
+        graph.add(scrP);
+        scrP.setViewportView(lgraph);
 
         JPanel tables = new JPanel();
         tables.setLayout(new GridLayout(2, 1));
@@ -304,7 +307,6 @@ public class Inter extends JFrame {
 
             lgraph.setText("Граф введен из файла " + file + ":\n");
             lgraph.append(input);
-            graph.add(lgraph);
         }
     }
 
@@ -325,7 +327,6 @@ public class Inter extends JFrame {
 
         lgraph.setText("Случайная генерация графа с " + input + " вершинами:\n");
         lgraph.append(n.getCurrentState());
-        graph.add(lgraph);
     }
 
     private void onDraw () {
@@ -364,7 +365,6 @@ public class Inter extends JFrame {
         endMatrix.setEnabled(false);
         resultMatrix.add(endMatrix);
         lgraph.setText(in);
-        graph.add(lgraph);
         this.revalidate();
 
     }
@@ -380,7 +380,6 @@ public class Inter extends JFrame {
         resultMatrix.add(endMatrix);
         lgraph.setText("Алгоритм завершен.\nТекущее состояние графа:\n");
         lgraph.append(n.getCurrentState());
-        graph.add(lgraph);
         this.revalidate();
 
     }
@@ -403,7 +402,6 @@ public class Inter extends JFrame {
 
         lgraph.setText("Граф введен с клавиатуры:\n");
         lgraph.append(input);
-        graph.add(lgraph);
     }
 
     private void onAddEdge(){
@@ -419,7 +417,6 @@ public class Inter extends JFrame {
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
         lgraph.setText("Добавлено ребро \"" + input + "\".\nПерезапустите алгоритм.");
-        graph.add(lgraph);
         this.revalidate();
 
     }
@@ -437,14 +434,13 @@ public class Inter extends JFrame {
         graphMatrix = n.drawMatrix();
         startMatrix.add(graphMatrix);
         lgraph.setText("Удалено ребро \"" + input + "\".\nПерезапустите алгоритм.");
-        graph.add(lgraph);
         this.revalidate();
     }
 
     private void onHelp(){
-        JFrame frame = new JFrame();
+        HelpWindow frame = new HelpWindow();
         frame.setVisible(true);
-        frame.setBounds(250,250, 300, 300);
+        frame.setBounds(250,250, 600, 300);
     }
 
     private void onInitialGraph(){
@@ -462,6 +458,5 @@ public class Inter extends JFrame {
         resultMatrix.updateUI();
         lgraph.setText("Результат работы алгоритма сброшен.\nТекущее состояние графа:\n");
         lgraph.append(n.getCurrentState());
-        graph.add(lgraph);
     }
 }
